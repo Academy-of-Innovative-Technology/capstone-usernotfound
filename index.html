@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Restroom Radar</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="container navbar">
+  <h1>🚻 Restroom Radar</h1>
+  <input type="text" placeholder="Search location...">
+</header>
+
+<!-- MAIN LAYOUT -->
+<div class="container layout">
+
+  <!-- FILTERS -->
+  <aside class="filters">
+    <h3>Filters</h3>
+    <label><input type="checkbox"> Accessible</label>
+    <label><input type="checkbox"> Baby Station</label>
+    <label><input type="checkbox"> Open Now</label>
+
+    <button class="btn-primary">Apply Filters</button>
+  </aside>
+
+  <!-- MAP AREA -->
+  <main class="map-area">
+
+    <div id="map"></div>
+
+    <!-- POPULAR SPOTS -->
+    <div class="cards-wrapper">
+
+      <h2 class="section-title">🔥 Popular Spots</h2>
+
+      <div class="cards">
+
+        <div class="card">
+          <h3>Central Park Restroom</h3>
+          <p>⭐ 4.6 • 3 min away</p>
+          <button class="btn-primary">View Details</button>
+        </div>
+
+        <div class="card">
+          <h3>Times Square Public Bathroom</h3>
+          <p>⭐ 4.2 • 5 min away</p>
+          <button class="btn-primary">View Details</button>
+        </div>
+
+        <div class="card">
+          <h3>Union Square Station</h3>
+          <p>⭐ 4.0 • 6 min away</p>
+          <button class="btn-primary">View Details</button>
+        </div>
+
+        <div class="card">
+          <h3>Grand Central Terminal</h3>
+          <p>⭐ 4.7 • 8 min away</p>
+          <button class="btn-primary">View Details</button>
+        </div>
+
+      </div>
+
+    </div>
+
