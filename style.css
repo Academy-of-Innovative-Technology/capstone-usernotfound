@@ -1,12 +1,12 @@
 
-/* GLOBAL */
+
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
   background: linear-gradient(135deg, #dbeafe, #f0fdfa);
 }
 
-/* CONTAINER */
+
 .container {
   width: 100%;
   max-width: 1400px;
@@ -14,7 +14,7 @@ body {
   padding: 0 20px;
 }
 
-/* NAVBAR */
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -30,7 +30,7 @@ body {
   width: 250px;
 }
 
-/* LAYOUT */
+
 .layout {
   display: grid;
   grid-template-columns: 300px 1fr;
@@ -38,7 +38,7 @@ body {
   height: calc(100vh - 80px);
 }
 
-/* FILTER PANEL */
+
 .filters {
   background: rgba(255,255,255,0.7);
   padding: 20px;
@@ -49,7 +49,7 @@ body {
   gap: 10px;
 }
 
-/* MAP AREA */
+
 .map-area {
   position: relative;
   border-radius: 20px;
@@ -62,7 +62,7 @@ body {
   background: #cfe8ff;
 }
 
-/* BUTTONS */
+
 button {
   border: none;
   padding: 14px 22px;
@@ -98,7 +98,7 @@ button {
   font-weight: 700;
 }
 
-/* CARD ROW */
+
 .cards {
   display: flex;
   gap: 15px;
@@ -106,7 +106,7 @@ button {
   padding-bottom: 10px;
 }
 
-/* CARD */
+
 .card {
   min-width: 260px;
   background: rgba(255,255,255,0.9);
@@ -117,9 +117,6 @@ button {
   transition: all 0.25s ease;
 }
 
-.card:hover {
-  transform: translateY(-6px) scale(1.02);
-}
 
 .card h3 {
   margin: 0 0 5px;
