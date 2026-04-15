@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    const MAPBOX_ACCESS_TOKEN = config.MAPBOX_KEY
+    const MAPBOX_ACCESS_TOKEN = config.MAPBOX_KEY;
 
     mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
     const map = new mapboxgl.Map({
