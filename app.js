@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoidXNlcm5vdGZvdW5kMiIsImEiOiJjbW55d3JienIwNjh5MnBwcmIwMjVkdjB6In0.aS1PXiKXNaEE4H2oaF6kqg';
+    const MAPBOX_ACCESS_TOKEN = config.MAPBOX_KEY
 
     mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
     const map = new mapboxgl.Map({
