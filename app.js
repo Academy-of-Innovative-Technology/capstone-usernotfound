@@ -1,14 +1,25 @@
 document.addEventListener('DOMContentLoaded', function () {
+  // If not logged in, redirect to the login page
+  const savedUser = (() => { try { return JSON.parse(sessionStorage.getItem('user')); } catch (e) { return null; }})();
+  if (!savedUser || !savedUser.username) {
+    // Avoid redirecting when already on the login page
+    if (!window.location.pathname.endsWith('login.html')) {
+      window.location.href = 'login.html';
+      return;
+    }
+  }
+
   if (document.querySelectorAll('.cards .card').length) {
     document.querySelectorAll('.cards .card').forEach(function (card) {
       const btn = card.querySelector('button');
       const title = card.querySelector('h3')?.innerText || '';
       const info = card.querySelector('p')?.innerText || '';
-      const imgEl = card.querySelector('img.card-img');
-      const img = imgEl ? imgEl.getAttribute('src') : '';
+  const imgEl = card.querySelector('img.card-img');
+  const img = imgEl ? imgEl.getAttribute('src') : '';
+  const description = card.dataset && card.dataset.description ? card.dataset.description : '';
 
       btn.addEventListener('click', function () {
-  const payload = { title: title, info: info, img: img };
+  const payload = { title: title, info: info, img: img, description: description };
         try {
           sessionStorage.setItem('selectedItem', JSON.stringify(payload));
         } catch (e) {
@@ -18,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
           url.searchParams.set('title', title);
           url.searchParams.set('info', info);
           url.searchParams.set('img', img);
+          url.searchParams.set('description', description);
           window.location.href = url.toString();
           return;
         }
@@ -38,14 +50,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!data) {
       const params = new URLSearchParams(window.location.search);
-      if (params.has('title') || params.has('info')) {
-        data = { title: params.get('title') || '', info: params.get('info') || '' };
+      if (params.has('title') || params.has('info') || params.has('description')) {
+        data = {
+          title: params.get('title') || '',
+          info: params.get('info') || '',
+          description: params.get('description') || ''
+        };
       }
     }
 
   const titleEl = document.getElementById('details-title');
   const infoEl = document.getElementById('details-info');
   const imgEl = document.getElementById('details-img');
+  const descEl = document.getElementById('details-description');
 
     if (data) {
       titleEl.innerText = data.title || 'No title';
@@ -57,10 +74,12 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         imgEl.style.display = 'none';
       }
+      descEl.innerText = data.description || '';
     } else {
       titleEl.innerText = 'No selection';
       infoEl.innerText = 'Please go back and choose an item.';
       imgEl.style.display = 'none';
+      descEl.innerText = '';
     }
   }
 });
