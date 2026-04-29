@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    mapboxgl.accessToken = 'pk.eyJ1IjoibmluamFhLXR1cnRsZXMiLCJhIjoiY204cTRiMnRpMGozeTJqcHM1bzRsMGNkOSJ9.vmRXru11d2mcAlIx7Zvc7Q';
+    mapboxgl.accessToken = config.MAPBOX_KEY;
 
 var mapProps = {
     container: 'map',
