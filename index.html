@@ -12,16 +12,35 @@
 <body>
   <header class="topbar">
     <div class="container navbar">
-      <h1>🚻 Restroom Radar</h1>
+      <h1 class="brand">🚻 Restroom Radar</h1>
       <nav aria-label="Main navigation">
         <a href="login.html">Login</a>
         <a href="profile.html">Profile</a>
       </nav>
-      <input type="text" placeholder="Search location..." aria-label="Search location">
+      <div class="search-wrap">
+        <input class="search-input" type="text" placeholder="Search location or address..." aria-label="Search location">
+      </div>
     </div>
   </header>
 
-  <div class="container layout">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <h2>Find clean public restrooms nearby — quickly and easily.</h2>
+        <p class="lead">Restroom Radar helps you locate restrooms with accessibility info, ratings, and walking time — perfect for events, travel, and everyday outings.</p>
+        <p>
+          <a class="btn-primary large" href="#map">Explore map</a>
+          <a class="btn-secondary" href="#popular">Popular spots</a>
+        </p>
+      </div>
+      <div class="hero-visual">
+        <div class="map-preview" aria-hidden="true">Map preview</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container layout" style="max-width:1200px;">
 
     <aside class="filters">
       <h3>Filters</h3>
@@ -73,8 +92,15 @@
     </main>
 
   </div>
+    <footer class="site-footer">
+      <div class="container">
+        <small>© <span id="year"></span> Restroom Radar — Built with care. <a href="#">Privacy</a> · <a href="#">Contact</a></small>
+      </div>
+    </footer>
 
-<script src="env.js"></script>
+  <script>document.getElementById('year').innerText = new Date().getFullYear();</script>
+
+  <script src="env.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <script src="app.js"></script>
 </body>
