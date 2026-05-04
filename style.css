@@ -142,3 +142,25 @@ button {
 
 
 .site-footer { margin-top: 36px; padding: 28px 0; text-align:center; color:#475569; }
+
+/* Profile page styles */
+.profile-card {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  background: rgba(255,255,255,0.96);
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(15,23,42,0.06);
+  max-width: 900px;
+  margin: 0 auto;
+}
+.profile-avatar img { width: 120px; height: 120px; border-radius: 999px; object-fit: cover; display: block; box-shadow: 0 10px 30px rgba(2,6,23,0.06); }
+.profile-info h2 { margin: 0 0 6px; font-size: 22px; }
+.profile-info .muted { color: #64748b; margin-top: 6px; }
+.profile-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+
+@media (max-width: 700px) {
+  .profile-card { flex-direction: column; text-align: center; }
+  .profile-fields { grid-template-columns: 1fr; }
+}
