@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Map - Restroom Radar</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+  <style>
+    /* make the map fill the viewport under the topbar */
+    body, html { height: 100%; margin: 0; }
+    .map-full { position: absolute; left: 0; right: 0; top: 72px; bottom: 0; }
+    #map { width: 100%; height: 100%; min-height: 300px; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container navbar">
+      <h1 class="brand">🚻 Restroom Radar</h1>
+      <nav aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="#">My Spots</a>
+      </nav>
+      <div class="search-wrap"><input class="search-input" type="text" placeholder="Search location..." aria-label="Search"></div>
+    </div>
+  </header>
+
+  <div class="map-full">
+    <div id="map" role="region" aria-label="Map showing restroom locations"></div>
+  </div>
+
+  <script src="env.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Restroom Radar</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Mapbox GL CSS -->
+
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
 </head>
 
@@ -23,20 +23,18 @@
     </div>
   </header>
 
-  <!-- Hero -->
+
   <section class="hero">
     <div class="container hero-inner">
       <div class="hero-copy">
         <h2>Find clean public restrooms nearby — quickly and easily.</h2>
         <p class="lead">Restroom Radar helps you locate restrooms with accessibility info, ratings, and walking time — perfect for events, travel, and everyday outings.</p>
         <p>
-          <a class="btn-primary large" href="#map">Explore map</a>
-          <a class="btn-secondary" href="#popular">Popular spots</a>
+          <a class="btn-primary large" href="map.html">Explore map</a>
+          <button id="show-popular-btn" class="btn-secondary" type="button">Popular spots</button>
         </p>
       </div>
-      <div class="hero-visual">
-        <div class="map-preview" aria-hidden="true">Map preview</div>
-      </div>
+
     </div>
   </section>
 
@@ -52,9 +50,9 @@
 
     <main class="map-area">
 
-      <div id="map" role="region" aria-label="Map showing restroom locations"></div>
+      <!-- map link removed from homepage per request -->
 
-      <div class="cards-wrapper">
+      <div class="cards-wrapper hidden" id="popular">
         <h2 class="section-title">🔥 Popular Spots</h2>
         <div class="cards">
 
@@ -97,9 +95,27 @@
 
       </div>
     </footer>
+    <script>
 
-  <script src="env.js"></script>
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-<script src="app.js"></script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('show-popular-btn');
+        const popular = document.getElementById('popular');
+        if (btn && popular) {
+          btn.addEventListener('click', function () {
+            popular.classList.toggle('hidden');
+            if (!popular.classList.contains('hidden')) {
+              btn.innerText = 'Hide popular spots';
+              popular.scrollIntoView({ behavior: 'smooth' });
+            } else {
+              btn.innerText = 'Popular spots';
+            }
+          });
+        }
+      });
+    </script>
+
+    <script src="env.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

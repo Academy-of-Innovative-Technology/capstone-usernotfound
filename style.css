@@ -85,6 +85,9 @@ body {
 .btn-secondary { margin-left: 12px; background: transparent; color: #0b5fff; border-radius: 999px; padding: 12px 18px; border: 1px solid rgba(11,91,255,0.12); font-weight:700; }
 .btn-primary.large { padding: 14px 22px; font-size: 16px; }
 
+/* utility */
+.hidden { display: none !important; }
+
 
 .cards-wrapper {
   position: absolute;
