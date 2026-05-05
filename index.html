@@ -27,31 +27,72 @@
   <section class="hero">
     <div class="container hero-inner">
       <div class="hero-copy">
-        <h2>Find clean public restrooms nearby — quickly and easily.</h2>
+        <h2>Find clean public restrooms nearby quickly and easily.</h2>
         <p class="lead">Restroom Radar helps you locate restrooms with accessibility info, ratings, and walking time — perfect for events, travel, and everyday outings.</p>
-        <p>
-          <a class="btn-primary large" href="map.html">Explore map</a>
-          <button id="show-popular-btn" class="btn-secondary" type="button">Popular spots</button>
-        </p>
+        <p><!-- hero CTAs removed; map now lives in its own section below --></p>
       </div>
 
     </div>
   </section>
+  <!-- Layered sections (features, showcase, popular) -->
+  <section class="section features">
+    <div class="container">
+      <div class="features-grid">
+        <article class="feature-card">
+          <h3>Quick Search</h3>
+          <p>Find nearby restrooms instantly with ratings and accessibility details.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Community Reports</h3>
+          <p>Users add notes and updates so the information stays fresh.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Offline Friendly</h3>
+          <p>Save spots to your account and access them when you're offline.</p>
+        </article>
+      </div>
+      <div class="overlap-card">
+        <div class="overlap-inner">
+          <h4>Filters</h4>
+          <div class="filters-mini">
+            <label><input type="checkbox"> Accessible</label>
+            <label><input type="checkbox"> Baby Station</label>
+            <label><input type="checkbox"> Open Now</label>
+          </div>
+          <div style="margin-top:12px"><button class="btn-primary">Apply</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <div class="container layout" style="max-width:1200px;">
+  <section class="section showcase">
+    <div class="container showcase-inner">
+      <div class="showcase-copy">
+        <h3>Explore your city with confidence</h3>
+        <p class="lead">Live map, crowd-sourced reviews, and accessibility details at your fingertips.</p>
+  <p><!-- showcase CTA removed; map has its own section below --></p>
+      </div>
+      <div class="showcase-visual">
+        <!-- decorative visual layer -->
+        <div class="visual-plate"> </div>
+      </div>
+    </div>
+  </section>
 
-    <aside class="filters">
-      <h3>Filters</h3>
-      <label><input type="checkbox"> Accessible</label>
-      <label><input type="checkbox"> Baby Station</label>
-      <label><input type="checkbox"> Open Now</label>
-      <button class="btn-primary">Apply Filters</button>
-    </aside>
+  <section class="section map-section">
+    <div class="container">
+      <a href="map.html" class="map-card">
+        <div class="map-card-inner">
+          <h3>Open the full interactive map</h3>
+          <p class="muted">Explore nearby restrooms, reviews, and accessibility details on the full map.</p>
+        </div>
+        <div class="map-thumb"></div>
+      </a>
+    </div>
+  </section>
 
-    <main class="map-area">
-
-      <!-- map link removed from homepage per request -->
-
+  <section class="section popular-section">
+    <div class="container">
       <div class="cards-wrapper hidden" id="popular">
         <h2 class="section-title">🔥 Popular Spots</h2>
         <div class="cards">
@@ -86,15 +127,14 @@
 
         </div>
       </div>
+    </div>
+  </section>
 
-    </main>
-
-  </div>
-    <footer class="site-footer">
-      <div class="container">
-
-      </div>
-    </footer>
+  <footer class="site-footer">
+    <div class="container">
+      <small>&copy; <span id="year"></span> Restroom Radar</small>
+    </div>
+  </footer>
     <script>
 
       document.addEventListener('DOMContentLoaded', function () {
