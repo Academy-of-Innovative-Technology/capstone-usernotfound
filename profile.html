@@ -18,7 +18,8 @@
     </div>
   </header>
 
-  <main class="container" style="padding-top:110px; padding-bottom:60px;">
+  <main class="container" style="padding-top:110px; padding-bottom:60px;
+  background-color: azure;">
     <div class="profile-card">
       <div class="profile-avatar">
         <img src="https://placehold.co/120x120/9fb8ff/fff?text=Me" alt="User avatar">
@@ -27,16 +28,36 @@
         <h2>Jane Doe</h2>
         <p class="muted">Member since 2024 • New York, NY</p>
 
+        <p class="bio">Hi I'm Jane. I love exploring the city and rating public spaces. I add spots I find during events and share accessibility notes to help others.</p>
+
         <div class="profile-fields">
           <div><strong>Email</strong><div class="muted">jane@example.com</div></div>
           <div><strong>Phone</strong><div class="muted">(555) 555-5555</div></div>
         </div>
 
-        <div style="margin-top:18px;">
+        <div style="margin-top:18px; display:flex; gap:10px;">
           <button class="btn-primary">Edit Profile</button>
           <button class="btn-secondary">View My Spots</button>
         </div>
       </div>
+    </div>
+
+    <div style="max-width:900px; margin:22px auto 0; display:grid; grid-template-columns: 1fr 320px; gap: 18px;">
+      <section class="panel">
+        <h3>Recent activity</h3>
+        <ul class="activity-list">
+          <li>Saved <strong>Astoria Park Restroom</strong> — 2 days ago</li>
+          <li>Left a review for <strong>Gantry Plaza</strong> — 5 days ago</li>
+          <li>Updated accessibility info for <strong>Brooklyn Bridge Park</strong> — 2 weeks ago</li>
+        </ul>
+      </section>
+
+      <aside class="panel">
+        <h3>Account settings</h3>
+        <label><input type="checkbox" checked> Receive email updates</label>
+        <label><input type="checkbox"> Show my saved spots publicly</label>
+        <div style="margin-top:12px;"><button class="btn-primary">Save settings</button></div>
+      </aside>
     </div>
   </main>
 
@@ -44,3 +65,12 @@
   <script>document.getElementById('year').innerText = new Date().getFullYear();</script>
 </body>
 </html>
+<h1>[Name]</h1>
+<h2>Role</h2>
+<h3>Home</h3>
+<h3>Pages</h3>
+<h3>Activity Stream</h3>
+<h3>People</h3>
+<h3>Site Settings</h3>
+<h3>My Preferences & Profile</h3>
+<h3>Help</h3>
