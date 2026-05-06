@@ -3,13 +3,7 @@
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  /* theme variables (Calm Teal) */
-  /* --bg-start / --bg-end: page background gradient
-     --primary-1 / --primary-2: primary button gradient
-     --accent: link and accent color
-     --muted: muted text color
-     --card-bg: card background
-  */
+ 
   --bg-start: #E6FFFA;
   --bg-end: #F7FFF3;
   --primary-1: #059669;
@@ -18,6 +12,20 @@ body {
   --muted: #334155;
   --card-bg: #FFFFFF;
   background: linear-gradient(135deg,var(--bg-start),var(--bg-end));
+}
+
+.side-images {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 12px;
+  width: 200px;
+}
+
+.side-images img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 .container {
@@ -67,7 +75,7 @@ body {
   border-radius: 20px;
   backdrop-filter: blur(8px);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
 }
 
