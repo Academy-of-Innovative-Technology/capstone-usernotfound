@@ -1,47 +1,49 @@
-<!doctype html>
-<html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Restroom Radar — Login</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Restroom Radar</title>
+  <link rel="stylesheet" href="style.css">
+
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+
+  <!-- added: larger centered horizontal gallery + snap + wheel-to-scroll -->
   <style>
-    :root{
-      --accent:#0072ff;
-      --muted:#6b7280;
-      --card:#ffffffcc;
-      --glass: rgba(255,255,255,0.7);
-      --radius:14px;
+    /* gallery container */
+    .side-images {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 20px;
+      margin: 24px auto;
+      max-width: 1200px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
     }
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(135deg,#dbeafe 0%,#f0fdfa 100%);color:#0b1220;}
-    header.site-header{
-      display:flex;align-items:center;justify-content:space-between;padding:18px 24px;backdrop-filter: blur(6px);
+
+    /* images: bigger, responsive, centered snap */
+    .side-images img {
+      flex: 0 0 auto;
+      width: 420px;              /* desired large size on desktop */
+      max-width: 80vw;          /* keep responsive on small screens */
+      height: 280px;
+      object-fit: cover;
+      border-radius: 10px;
+      scroll-snap-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      transition: transform .18s ease;
     }
-    .brand{display:flex;align-items:center;gap:12px}
-    .brand .logo{
-      width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#00c6ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;box-shadow:0 6px 20px rgba(2,6,23,0.06);
+
+    .side-images img:hover {
+      transform: scale(1.03);
     }
-    .brand h1{font-size:18px;margin:0}
-    .brand p{margin:0;font-size:12px;color:var(--muted)}
-    main.login-root{display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:center;max-width:1200px;margin:48px auto;padding:0 20px;}
-    .hero {
-      padding:36px;border-radius:var(--radius);background:linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.35));
-      box-shadow:0 10px 40px rgba(2,6,23,0.05);
-    }
-    .hero h2{margin:0 0 12px 0;font-size:28px}
-    .hero p{margin:0;color:var(--muted);line-height:1.4}
-    .login-box {
-      background:var(--card);padding:26px;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.06);display:flex;flex-direction:column;gap:12px;
-    }
-    .login-box label{font-size:13px;color:var(--muted);margin-top:8px}
-    .login-box input{padding:12px 14px;border-radius:8px;border:1px solid #e6e9ef;font-size:15px}
-    .login-actions{display:flex;align-items:center;justify-content:space-between;margin-top:8px;gap:12px}
-    .small-link{font-size:13px;color:var(--muted);text-decoration:none}
-    .btn-primary{cursor:pointer}
-    .footer-note{margin-top:20px;font-size:13px;color:var(--muted)}
-    /* responsive */
-    @media (max-width:900px){
-      main.login-root{grid-template-columns:1fr;padding:20px;margin:20px auto;gap:18px}
+
+    /* thin desktop scrollbar (optional) */
+    .side-images::-webkit-scrollbar { height: 10px; }
+    .side-images::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.18);
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -95,27 +97,42 @@
     </form>
   </main>
 
-  <script>
-    // Keep same behavior but nicer feedback
-    document.getElementById('login-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const username = document.getElementById('username')?.value?.trim();
-      const password = document.getElementById('password')?.value?.trim();
-      const zipcode = document.getElementById('zipcode')?.value?.trim();
+    <script>
 
-      if (!username || !password) { alert('Please enter username and password'); return; }
-      if (!/^[0-9]{5}$/.test(zipcode)) { alert('Enter a 5-digit ZIP code'); return; }
+      document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('show-popular-btn');
+        const popular = document.getElementById('popular');
+        if (btn && popular) {
+          btn.addEventListener('click', function () {
+            popular.classList.toggle('hidden');
+            if (!popular.classList.contains('hidden')) {
+              btn.innerText = 'Hide popular spots';
+              popular.scrollIntoView({ behavior: 'smooth' });
+            } else {
+              btn.innerText = 'Popular spots';
+            }
+          });
+        }
 
-      try { sessionStorage.setItem('user', JSON.stringify({ username, zipcode })); } catch (err) {}
-      window.location.href = 'index.html';
-    });
+        // enable mouse wheel to scroll the side-images horizontally
+        const gallery = document.querySelector('.side-images');
+        if (gallery) {
+          gallery.addEventListener('wheel', function (e) {
+            // only intercept primarily-vertical wheel events
+            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+              e.preventDefault();
+              gallery.scrollLeft += e.deltaY;
+            }
+          }, { passive: false });
 
-    // quick guest button for testing without redirect loop
-    document.getElementById('guest-btn').addEventListener('click', function (e) {
-      e.preventDefault();
-      try { sessionStorage.setItem('user', JSON.stringify({ username: 'guest', zipcode: '10001' })); } catch (err) {}
-      window.location.href = 'index.html';
-    });
-  </script>
+          // allow keyboard arrow navigation for accessibility
+          gallery.setAttribute('tabindex', '0');
+          gallery.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowRight') gallery.scrollLeft += 200;
+            if (e.key === 'ArrowLeft') gallery.scrollLeft -= 200;
+          });
+        }
+      });
+    </script>
 </body>
 </html>
