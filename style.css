@@ -16,7 +16,6 @@ body {
 
 .side-images {
   display: flex;
-  justify-content: center;
   flex-direction: row;
   gap: 12px;
   width: 200px;
@@ -26,6 +25,7 @@ body {
   width: 100%;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
 }
 
 .container {
@@ -107,10 +107,10 @@ body {
 .btn-secondary { margin-left: 12px; background: transparent; color: var(--accent); border-radius: 999px; padding: 12px 18px; border: 1px solid rgba(15,118,110,0.10); font-weight:700; }
 .btn-primary.large { padding: 14px 22px; font-size: 16px; }
 
-/* utility */
+
 .hidden { display: none !important; }
 
-/* Sections and layered layout */
+
 .section { padding: 64px 0; position: relative; }
 .features { background: linear-gradient(135deg,#F1FFF7,var(--bg-end)); overflow: visible; }
 .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
@@ -125,7 +125,6 @@ body {
 
 .popular-section { background: linear-gradient(180deg,#F8FFFB,var(--card-bg)); padding-bottom: 90px; }
 
-/* Map section card */
 .map-section { background: linear-gradient(180deg,#ffffff,#f8fafc); }
 .map-card { display:flex; gap:18px; align-items:center; text-decoration:none; color:inherit; background: linear-gradient(180deg,var(--card-bg),#F8FBFF); padding:18px; border-radius:14px; box-shadow: 0 18px 40px rgba(2,6,23,0.05); }
 .map-card-inner { flex:1; }
@@ -197,7 +196,6 @@ button {
 
 .site-footer { margin-top: 36px; padding: 28px 0; text-align:center; color:#475569; }
 
-/* Profile page styles */
 .profile-card {
   display: flex;
   gap: 28px;
