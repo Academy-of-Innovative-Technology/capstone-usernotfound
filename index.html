@@ -7,55 +7,8 @@
   <link rel="stylesheet" href="style.css">
 
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
-
-  <!-- added: gallery styles (bigger images, centered, own horizontal scrollbar) -->
-  <style>
-    /* gallery container: own scrollbar, centered, snap to center */
-    .side-images {
-      display: flex;
-      gap: 18px;
-      align-items: center;
-      justify-content: center;
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding: 18px;
-      margin: 24px auto;
-      max-width: 1200px;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-gutter: stable;
-      background: transparent;
-    }
-
-    /* larger images, responsive, centered snap */
-    .side-images img {
-      flex: 0 0 auto;
-      width: 520px;            /* larger size */
-      max-width: 90vw;        /* responsive on small screens */
-      height: 340px;
-      object-fit: cover;
-      border-radius: 12px;
-      scroll-snap-align: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-      transition: transform .18s ease;
-    }
-
-    .side-images img:hover {
-      transform: scale(1.03);
-    }
-
-    /* scrollbar styling for WebKit (visible even on mac when interacting) */
-    .side-images::-webkit-scrollbar { height: 12px; }
-    .side-images::-webkit-scrollbar-track { background: rgba(0,0,0,0.04); border-radius: 8px; }
-    .side-images::-webkit-scrollbar-thumb {
-      background: rgba(0,0,0,0.18);
-      border-radius: 8px;
-    }
-
-    /* Firefox thin scrollbar */
-    .side-images { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.18) transparent; }
-  </style>
 </head>
+
 <body>
   <header class="topbar">
     <div class="container navbar">
@@ -139,7 +92,7 @@
   </section>
 
  
-  <script>
+    <script>
 
       document.addEventListener('DOMContentLoaded', function () {
         const btn = document.getElementById('show-popular-btn');
@@ -153,25 +106,6 @@
             } else {
               btn.innerText = 'Popular spots';
             }
-          });
-        }
-
-        // enable mouse wheel to scroll the side-images horizontally
-        const gallery = document.querySelector('.side-images');
-        if (gallery) {
-          // intercept vertical wheel and translate to horizontal scroll
-          gallery.addEventListener('wheel', function (e) {
-            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-              e.preventDefault();
-              gallery.scrollLeft += e.deltaY;
-            }
-          }, { passive: false });
-
-          // keyboard navigation for accessibility
-          gallery.setAttribute('tabindex', '0');
-          gallery.addEventListener('keydown', function (e) {
-            if (e.key === 'ArrowRight') gallery.scrollLeft += 300;
-            if (e.key === 'ArrowLeft') gallery.scrollLeft -= 300;
           });
         }
       });
