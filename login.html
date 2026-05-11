@@ -3,8 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Restroom Radar — Login</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Restroom Radar</title>
+  <link rel="stylesheet" href="style.css">
+
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+
+  <!-- added: larger centered horizontal gallery + snap + wheel-to-scroll -->
   <style>
     :root{
       --accent:#0072ff;
@@ -46,19 +50,15 @@
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="brand">
-      <div class="logo">RR</div>
-      <div>
-        <h1>Restroom Radar</h1>
-        <p>Find public restrooms near you</p>
-      </div>
+  <header class="topbar">
+    <div class="container navbar">
+      <h1 class="brand">🚻 Restroom Radar</h1>
+      <nav aria-label="top">
+        <a class="small-link" href="index.html">Home</a>
+        <a class="small-link" href="#" onclick="alert('Privacy policy placeholder');return false">Privacy</a>
+      </nav>
+      <div class="search-wrap" aria-hidden="true"></div>
     </div>
-    <nav aria-label="top">
-      <a class="small-link" href="index.html">Home</a>
-      <span style="margin:0 10px;color:var(--muted)">•</span>
-      <a class="small-link" href="#" onclick="alert('Privacy policy placeholder');return false">Privacy</a>
-    </nav>
   </header>
 
   <main class="login-root">
@@ -84,7 +84,7 @@
       <input id="zipcode" name="zipcode" type="text" inputmode="numeric" pattern="[0-9]*" required placeholder="5-digit ZIP code">
 
       <div class="login-actions">
-        <button id="submit-login" type="submit" class="btn-primary" style="background:linear-gradient(135deg,var(--accent),#00c6ff);color:#fff;padding:10px 16px;border-radius:999px;border:none;font-weight:700">Go to Radar</button>
+        <button id="submit-login" type="submit" class="btn-primary">Go to Radar</button>
         <a class="small-link" href="#" id="guest-btn">Continue as Guest</a>
       </div>
 
@@ -95,27 +95,42 @@
     </form>
   </main>
 
-  <script>
-    // Keep same behavior but nicer feedback
-    document.getElementById('login-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const username = document.getElementById('username')?.value?.trim();
-      const password = document.getElementById('password')?.value?.trim();
-      const zipcode = document.getElementById('zipcode')?.value?.trim();
+    <script>
 
-      if (!username || !password) { alert('Please enter username and password'); return; }
-      if (!/^[0-9]{5}$/.test(zipcode)) { alert('Enter a 5-digit ZIP code'); return; }
+      document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('show-popular-btn');
+        const popular = document.getElementById('popular');
+        if (btn && popular) {
+          btn.addEventListener('click', function () {
+            popular.classList.toggle('hidden');
+            if (!popular.classList.contains('hidden')) {
+              btn.innerText = 'Hide popular spots';
+              popular.scrollIntoView({ behavior: 'smooth' });
+            } else {
+              btn.innerText = 'Popular spots';
+            }
+          });
+        }
 
-      try { sessionStorage.setItem('user', JSON.stringify({ username, zipcode })); } catch (err) {}
-      window.location.href = 'index.html';
-    });
+        // enable mouse wheel to scroll the side-images horizontally
+        const gallery = document.querySelector('.side-images');
+        if (gallery) {
+          gallery.addEventListener('wheel', function (e) {
+            // only intercept primarily-vertical wheel events
+            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+              e.preventDefault();
+              gallery.scrollLeft += e.deltaY;
+            }
+          }, { passive: false });
 
-    // quick guest button for testing without redirect loop
-    document.getElementById('guest-btn').addEventListener('click', function (e) {
-      e.preventDefault();
-      try { sessionStorage.setItem('user', JSON.stringify({ username: 'guest', zipcode: '10001' })); } catch (err) {}
-      window.location.href = 'index.html';
-    });
-  </script>
+          // allow keyboard arrow navigation for accessibility
+          gallery.setAttribute('tabindex', '0');
+          gallery.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowRight') gallery.scrollLeft += 200;
+            if (e.key === 'ArrowLeft') gallery.scrollLeft -= 200;
+          });
+        }
+      });
+    </script>
 </body>
 </html>
