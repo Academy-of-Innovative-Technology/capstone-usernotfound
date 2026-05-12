@@ -153,8 +153,7 @@
   </section>
 
  
-  <script>
-
+    <script>
       document.addEventListener('DOMContentLoaded', function () {
         const btn = document.getElementById('show-popular-btn');
         const popular = document.getElementById('popular');
@@ -171,44 +170,43 @@
         }
       });
     </script>
-<section class="section popular" id="popular" ></section>
-      <div class="cards-wrapper">
-        <h2 class="section-title">🔥 Popular Spots</h2>
-        <div class="cards">
-          <div class="card" data-description="Public restroom near the Astoria Park waterfront.">
-            <img class="card-img" src="https://assets.dnainfo.com/generated/photo/2015/06/playground-toilets-2-1434044626.jpg/extralarge.jpg" alt="Astoria Park" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
-            <h3>Astoria Park Restroom</h3>
-            <p>⭐ 3.8 • Astoria, Queens</p>
-            <button class="btn-primary">View Details</button>
-          </div>
 
-          <div class="card" data-description="Restroom near Gantry Plaza State Park.">
-            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/0/06/Gantry_Plaza_State_Park_from_East_River_Promenade.jpg" alt="Gantry Plaza" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
-            <h3>Gantry Plaza State Park</h3>
-            <p>⭐ 4.4 • Long Island City</p>
-            <button class="btn-primary">View Details</button>
-          </div>
+  <!-- Fixed: Popular section properly nested and no stray closing tags -->
+  <section class="section popular" id="popular">
+    <div class="container cards-wrapper">
+      <h2 class="section-title">🔥 Popular Spots</h2>
+      <div class="cards">
+        <div class="card" data-description="Public restroom near the Astoria Park waterfront.">
+          <img class="card-img" src="https://assets.dnainfo.com/generated/photo/2015/06/playground-toilets-2-1434044626.jpg/extralarge.jpg" alt="Astoria Park" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
+          <h3>Astoria Park Restroom</h3>
+          <p>⭐ 3.8 • Astoria, Queens</p>
+          <button class="btn-primary">View Details</button>
+        </div>
 
-          <div class="card" data-description="Brooklyn Bridge Park restroom with waterfront access.">
-            <img class="card-img" src="https://storage.ghost.io/c/29/5d/295dd95c-dc6c-40d7-9ed4-60debccaffe7/content/images/size/w1200/2025/05/IMG_5713.jpg" alt="Brooklyn Bridge Park" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
-            <h3>Brooklyn Bridge Park</h3>
-            <p>⭐ 4.8 • DUMBO, Brooklyn</p>
-            <button class="btn-primary">View Details</button>
-          </div>
+        <div class="card" data-description="Restroom near Gantry Plaza State Park.">
+          <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/0/06/Gantry_Plaza_State_Park_from_East_River_Promenade.jpg" alt="Gantry Plaza" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
+          <h3>Gantry Plaza State Park</h3>
+          <p>⭐ 4.4 • Long Island City</p>
+          <button class="btn-primary">View Details</button>
+        </div>
 
-          <div class="card" data-description="Public restroom along the Coney Island boardwalk.">
-            <img class="card-img" src="https://c8.alamy.com/comp/R4A90D/futuristic-bathrooms-coney-island-brooklyn-new-york-united-states-of-america-R4A90D.jpg" alt="Coney Island" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
-            <h3>Coney Island Boardwalk</h3>
-            <p>⭐ 4.5 • Coney Island, Brooklyn</p>
-            <button class="btn-primary">View Details</button>
-          </div>
+        <div class="card" data-description="Brooklyn Bridge Park restroom with waterfront access.">
+          <img class="card-img" src="https://storage.ghost.io/c/29/5d/295dd95c-dc6c-40d7-9ed4-60debccaffe7/content/images/size/w1200/2025/05/IMG_5713.jpg" alt="Brooklyn Bridge Park" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
+          <h3>Brooklyn Bridge Park</h3>
+          <p>⭐ 4.8 • DUMBO, Brooklyn</p>
+          <button class="btn-primary">View Details</button>
+        </div>
+
+        <div class="card" data-description="Public restroom along the Coney Island boardwalk.">
+          <img class="card-img" src="https://c8.alamy.com/comp/R4A90D/futuristic-bathrooms-coney-island-brooklyn-new-york-united-states-of-america-R4A90D.jpg" alt="Coney Island" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
+          <h3>Coney Island Boardwalk</h3>
+          <p>⭐ 4.5 • Coney Island, Brooklyn</p>
+          <button class="btn-primary">View Details</button>
         </div>
       </div>
-    </main>
-  </div>
+    </div>
   </section>
-
-
+  
     <script src="env.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
     <script src="app.js"></script>

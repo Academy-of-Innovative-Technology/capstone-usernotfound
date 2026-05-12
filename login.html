@@ -3,265 +3,151 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Restroom Radar</title>
+  <title>Restroom Radar — Login</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- added: larger centered horizontal gallery + snap + wheel-to-scroll -->
   <style>
-    /* gallery container */
-    .side-images {
-      display: flex;
-      gap: 18px;
-      align-items: center;
-      justify-content: center;
-      overflow-x: auto;
-      padding: 20px;
-      margin: 24px auto;
-      max-width: 1200px;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    /* images: bigger, responsive, centered snap */
-    .side-images img {
-      flex: 0 0 auto;
-      width: 420px;
-              /* desired large size on desktop */
-      max-width: 80vw;          /* keep responsive on small screens */
-      height: 280px;
-      object-fit: cover;
-      border-radius: 10px;
-      scroll-snap-align: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-      transition: transform .18s ease;
-    }
-
-    .side-images img:hover {
-      transform: scale(1.03);
-    }
-
-    /* thin desktop scrollbar (optional) */
-    .side-images::-webkit-scrollbar { height: 10px; }
-    .side-images::-webkit-scrollbar-thumb {
-      background: rgba(0,0,0,0.18);
-      border-radius: 8px;
-    }
+   
+    .login-root { max-width: 980px; margin: 80px auto; padding: 0 16px; }
+    .login-box { background: var(--card-bg, #fff); padding: 20px; border-radius: 12px; max-width: 520px; margin: 0 auto; box-shadow: var(--shadow, 0 10px 30px rgba(2,6,23,0.06)); }
+    label { display:block; margin-top:12px; font-weight:600; }
+    input[type="text"], input[type="password"] { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e6e9ee; margin-top:6px; }
+    .login-actions { display:flex; gap:12px; align-items:center; margin-top:16px; }
+    .btn-primary { background:linear-gradient(135deg,#0b5fff,#00c6ff); color:#fff; border:none; padding:10px 14px; border-radius:999px; cursor:pointer; font-weight:700; }
+    .small-link { background:transparent; color:var(--accent,#0b5fff); border:none; padding:10px 14px; border-radius:999px; cursor:pointer; font-weight:700; }
+    .input-error { color:#c53030; margin-top:8px; font-size:13px; }
+    .invalid { outline: 2px solid rgba(197,63,63,0.12); }
+    .footer-note { margin-top:12px; font-size:13px; color:var(--muted,#475569); }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="container navbar">
-      <h1 class="brand">🚻 Restroom Radar</h1>
-      <nav aria-label="top">
-        <a class="small-link" href="index.html">Home</a>
-        <a class="small-link" href="#" onclick="alert('Privacy policy placeholder');return false">Privacy</a>
-      </nav>
-      <div class="search-wrap" aria-hidden="true"></div>
-    </div>
+  <header style="padding:18px 16px; text-align:center">
+    <h1 style="margin:0">🚻 Restroom Radar</h1>
   </header>
 
   <main class="login-root">
-    <section class="hero" aria-hidden="false">
-      <h2>Welcome back — let's get you on the map</h2>
-      <p>Restroom Radar helps you discover nearby public restrooms with accessibility features, ratings, and directions. Sign in to save favorites and see personalized suggestions.</p>
-      <div class="footer-note">
-        Tip: You can test the map without creating an account — the app stores a session locally.
-      </div>
-    </section>
-
     <form id="login-form" class="login-box" novalidate>
-      <h3 style="margin:0 0 6px 0">Sign in to Restroom Radar</h3>
+      <h2 style="margin:0 0 8px 0">Sign in to Restroom Radar</h2>
 
       <label for="username">Username</label>
-      <input id="username" name="username" type="text" autocomplete="username" required placeholder="e.g. alex123" />
+      <input id="username" name="username" type="text" autocomplete="username" required placeholder="e.g. alex123">
 
       <label for="password">Password</label>
-      <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Enter a password" />
+      <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Enter a password">
 
       <label for="zipcode">Zip Code</label>
-      <input id="zipcode" name="zipcode" type="text" inputmode="numeric" pattern="[0-9]*" required placeholder="5-digit ZIP code" />
+      <input id="zipcode" name="zipcode" type="text" inputmode="numeric" pattern="[0-9]*" required placeholder="5-digit ZIP code">
 
       <div class="login-actions">
         <button id="submit-login" type="submit" class="btn-primary">Go to Radar</button>
-        <!-- Updated: link now points to map.html -->
-        <a class="small-link" href="index.html" id="guest-btn">Continue as Guest</a>
+        <button type="button" class="small-link" id="guest-btn">Continue as Guest</button>
       </div>
 
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
-        <a class="small-link" href="#" onclick="alert('Reset password placeholder');return false">Forgot password?</a>
-        <a class="small-link" href="#" onclick="alert('Create account placeholder');return false">Create account</a>
+      <div class="footer-note">
+        Tip: For testing use any username (≥2 chars), password (≥4 chars) and a 5-digit ZIP. Guest will skip validation.
       </div>
     </form>
   </main>
 
   <script>
-document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
 
-  // =========================
-  // IMAGE GALLERY SUPPORT
-  // =========================
-  const gallery = document.querySelector('.side-images');
+      const form = document.getElementById('login-form');
+      const username = document.getElementById('username');
+      const password = document.getElementById('password');
+      const zipcode = document.getElementById('zipcode');
+      const guestBtn = document.getElementById('guest-btn');
+      const submitBtn = document.getElementById('submit-login');
 
-  if (gallery) {
+      function clearError(input) {
+        if (!input) return;
+        input.classList.remove('invalid');
+        const next = input.nextElementSibling;
+        if (next && next.classList.contains('input-error')) next.remove();
+      }
 
-    // Mouse wheel horizontal scroll
-    gallery.addEventListener('wheel', (e) => {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      function showError(input, message) {
+        if (!input) return;
+        clearError(input);
+        input.classList.add('invalid');
+        const error = document.createElement('div');
+        error.className = 'input-error';
+        error.setAttribute('aria-live', 'polite');
+        error.textContent = message;
+        input.insertAdjacentElement('afterend', error);
+      }
+
+      function validateForm() {
+        let valid = true;
+
+        if (!username || username.value.trim().length < 2) {
+          showError(username, 'Username must be at least 2 characters');
+          valid = false;
+        } else clearError(username);
+
+        if (!password || password.value.trim().length < 4) {
+          showError(password, 'Password must be at least 4 characters');
+          valid = false;
+        } else clearError(password);
+
+        const zip = zipcode ? zipcode.value.trim() : '';
+        if (!/^\d{5}$/.test(zip)) {
+          showError(zipcode, 'Enter a valid 5-digit ZIP code');
+          valid = false;
+        } else clearError(zipcode);
+
+        return valid;
+      }
+
+      if (!form) {
+        console.error('login: form element not found');
+        return;
+      }
+
+      // Form submit handler
+      form.addEventListener('submit', (e) => {
         e.preventDefault();
-        gallery.scrollLeft += e.deltaY;
-      }
-    }, { passive: false });
+        if (!validateForm()) return;
 
-    // Keyboard navigation
-    gallery.setAttribute('tabindex', '0');
+        const user = {
+          username: username.value.trim(),
+          zipcode: zipcode.value.trim(),
+          loggedIn: true
+        };
 
-    gallery.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') {
-        gallery.scrollLeft += 250;
+        try { sessionStorage.setItem('rr_user', JSON.stringify(user)); }
+        catch (err) { console.error('Session storage failed:', err); }
+
+        // go to home page
+        window.location.href = 'index.html';
+      });
+
+      // Ensure submit button triggers submit even if browser quirks exist
+      if (submitBtn) {
+        submitBtn.addEventListener('click', (ev) => {
+          ev.preventDefault();
+          if (typeof form.requestSubmit === 'function') form.requestSubmit();
+          else form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        });
       }
 
-      if (e.key === 'ArrowLeft') {
-        gallery.scrollLeft -= 250;
+      // Guest button: skip validation and go to home
+      if (guestBtn) {
+        guestBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const guestUser = { username: 'Guest', guest: true, loggedIn: true };
+          try { sessionStorage.setItem('rr_user', JSON.stringify(guestUser)); }
+          catch (err) { console.error('Session storage failed:', err); }
+          window.location.href = 'index.html';
+        });
       }
+
+      // Live input cleanup
+      [username, password, zipcode].forEach((input) => {
+        if (!input) return;
+        input.addEventListener('input', () => clearError(input));
+      });
+
     });
-  }
-
-  // =========================
-  // FORM ELEMENTS
-  // =========================
-  const form = document.getElementById('login-form');
-  const username = document.getElementById('username');
-  const password = document.getElementById('password');
-  const zipcode = document.getElementById('zipcode');
-  const guestBtn = document.getElementById('guest-btn');
-
-  // =========================
-  // ERROR HELPERS
-  // =========================
-  function showError(input, message) {
-
-    clearError(input);
-
-    input.classList.add('invalid');
-
-    const error = document.createElement('div');
-    error.className = 'input-error';
-    error.setAttribute('aria-live', 'polite');
-    error.textContent = message;
-
-    input.insertAdjacentElement('afterend', error);
-  }
-
-  function clearError(input) {
-
-    input.classList.remove('invalid');
-
-    const next = input.nextElementSibling;
-
-    if (next && next.classList.contains('input-error')) {
-      next.remove();
-    }
-  }
-
-  // =========================
-  // VALIDATION
-  // =========================
-  function validateForm() {
-
-    let valid = true;
-
-    // Username
-    if (username.value.trim().length < 2) {
-      showError(username, 'Username must be at least 2 characters');
-      valid = false;
-    } else {
-      clearError(username);
-    }
-
-    // Password
-    if (password.value.trim().length < 4) {
-      showError(password, 'Password must be at least 4 characters');
-      valid = false;
-    } else {
-      clearError(password);
-    }
-
-    // ZIP code
-    const zip = zipcode.value.trim();
-
-    if (!/^\d{5}$/.test(zip)) {
-      showError(zipcode, 'Enter a valid 5-digit ZIP code');
-      valid = false;
-    } else {
-      clearError(zipcode);
-    }
-
-    return valid;
-  }
-
-  // =========================
-  // LOGIN SUBMIT
-  // =========================
-  form.addEventListener('submit', (e) => {
-
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    // Save session
-    const user = {
-      username: username.value.trim(),
-      zipcode: zipcode.value.trim(),
-      loggedIn: true
-    };
-
-    try {
-      sessionStorage.setItem('rr_user', JSON.stringify(user));
-    } catch (err) {
-      console.error('Session storage failed:', err);
-    }
-
-    // Redirect to map page
-    window.location.href = 'map.html';
-  });
-
-  // =========================
-  // GUEST LOGIN
-  // =========================
-  if (guestBtn) {
-
-    guestBtn.addEventListener('click', (e) => {
-
-      e.preventDefault();
-
-      const guestUser = {
-        username: 'Guest',
-        guest: true,
-        loggedIn: true
-      };
-
-      try {
-        sessionStorage.setItem('rr_user', JSON.stringify(guestUser));
-      } catch (err) {
-        console.error('Session storage failed:', err);
-      }
-
-      window.location.href = 'map.html';
-    });
-  }
-
-  // =========================
-  // LIVE INPUT CLEARING
-  // =========================
-  [username, password, zipcode].forEach((input) => {
-
-    input.addEventListener('input', () => {
-      clearError(input);
-    });
-  });
-
-});
-</script>
+  </script>
 </body>
 </html>
