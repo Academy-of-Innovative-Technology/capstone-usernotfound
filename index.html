@@ -7,6 +7,54 @@
   <link rel="stylesheet" href="style.css">
 
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+
+  <!-- added: gallery styles (bigger images, centered, own horizontal scrollbar) -->
+  <style>
+    /* gallery container: own scrollbar, centered, snap to center */
+    .side-images {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      justify-content: center;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 18px;
+      margin: 24px auto;
+      max-width: 1200px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-gutter: stable;
+      background: transparent;
+    }
+
+    /* larger images, responsive, centered snap */
+    .side-images img {
+      flex: 0 0 auto;
+      width: 520px;            /* larger size */
+      max-width: 90vw;        /* responsive on small screens */
+      height: 340px;
+      object-fit: cover;
+      border-radius: 12px;
+      scroll-snap-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      transition: transform .18s ease;
+    }
+
+    .side-images img:hover {
+      transform: scale(1.03);
+    }
+
+    /* scrollbar styling for WebKit (visible even on mac when interacting) */
+    .side-images::-webkit-scrollbar { height: 12px; }
+    .side-images::-webkit-scrollbar-track { background: rgba(0,0,0,0.04); border-radius: 8px; }
+    .side-images::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.18);
+      border-radius: 8px;
+    }
+
+    /* Firefox thin scrollbar */
+    .side-images { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.18) transparent; }
+  </style>
 </head>
 
 <body>
@@ -34,6 +82,8 @@
 
     </div>
   </section>
+
+
   <div class="side-images">
   <img src="https://thearchitectsdiary.com/wp-content/uploads/2020/05/Public-toilets-1024x683.jpg" alt="Public restroom 1">
   <img src="https://t4.ftcdn.net/jpg/06/14/46/07/240_F_614460720_73P86IhawwZ4O1gfbYan2AgfDORQSwEL.jpg" alt="Public restroom 2">
@@ -102,51 +152,8 @@
     </div>
   </section>
 
-  <section class="section popular-section">
-    <div class="container">
-      <div class="cards-wrapper hidden" id="popular">
-        <h2 class="section-title">🔥 Popular Spots</h2>
-        <div class="cards">
-
-          <div class="card" data-description="Public restroom near the Astoria Park waterfront with accessible facilities and seasonal hours.">
-            <img loading="lazy" class="card-img" src="https://assets.dnainfo.com/generated/photo/2015/06/playground-toilets-2-1434044626.jpg/extralarge.jpg" alt="Astoria Park" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
-            <h3>Astoria Park Restroom</h3>
-            <p>⭐ 3.8 • Astoria, Queens</p>
-            <button class="btn-primary">View Details</button>
-          </div>
-
-          <div class="card" data-description="Restroom near Gantry Plaza State Park with great waterfront views and nearby seating.">
-            <img loading="lazy" class="card-img" src="https://qns.com/wp-content/uploads/2025/09/Untitled-design.jpg?quality=51" alt="Gantry Plaza" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
-            <h3>Gantry Plaza State Park Restroom</h3>
-            <p>⭐ 4.8 • Long Island City, Queens</p>
-            <button class="btn-primary">View Details</button>
-          </div>
-
-          <div class="card" data-description="Brooklyn Bridge Park restroom with great waterfront access; busy on weekends but well-maintained.">
-            <img loading="lazy" class="card-img" src="https://storage.ghost.io/c/29/5d/295dd95c-dc6c-40d7-9ed4-60debccaffe7/content/images/size/w1200/2025/05/IMG_5713.jpg" alt="Brooklyn Bridge Park" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
-            <h3>Brooklyn Bridge Park Restroom</h3>
-            <p>⭐ 4.8 • DUMBO, Brooklyn</p>
-            <button class="btn-primary">View Details</button>
-          </div>
-
-          <div class="card" data-description="Public restroom along the Coney Island boardwalk — convenient for beachgoers and attractions.">
-            <img loading="lazy" class="card-img" src="https://c8.alamy.com/comp/R4A90D/futuristic-bathrooms-coney-island-brooklyn-new-york-united-states-of-america-R4A90D.jpg" alt="Coney Island" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
-            <h3>Coney Island Boardwalk Restroom</h3>
-            <p>⭐ 4.5 • Coney Island, Brooklyn</p>
-            <button class="btn-primary">View Details</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer class="site-footer">
-    <div class="container">
-      <small>&copy; <span id="year"></span> Restroom Radar</small>
-    </div>
-  </footer>
-    <script>
+ 
+  <script>
 
       document.addEventListener('DOMContentLoaded', function () {
         const btn = document.getElementById('show-popular-btn');
@@ -164,6 +171,43 @@
         }
       });
     </script>
+<section class="section popular" id="popular" ></section>
+      <div class="cards-wrapper">
+        <h2 class="section-title">🔥 Popular Spots</h2>
+        <div class="cards">
+          <div class="card" data-description="Public restroom near the Astoria Park waterfront.">
+            <img class="card-img" src="https://assets.dnainfo.com/generated/photo/2015/06/playground-toilets-2-1434044626.jpg/extralarge.jpg" alt="Astoria Park" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
+            <h3>Astoria Park Restroom</h3>
+            <p>⭐ 3.8 • Astoria, Queens</p>
+            <button class="btn-primary">View Details</button>
+          </div>
+
+          <div class="card" data-description="Restroom near Gantry Plaza State Park.">
+            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/0/06/Gantry_Plaza_State_Park_from_East_River_Promenade.jpg" alt="Gantry Plaza" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
+            <h3>Gantry Plaza State Park</h3>
+            <p>⭐ 4.4 • Long Island City</p>
+            <button class="btn-primary">View Details</button>
+          </div>
+
+          <div class="card" data-description="Brooklyn Bridge Park restroom with waterfront access.">
+            <img class="card-img" src="https://storage.ghost.io/c/29/5d/295dd95c-dc6c-40d7-9ed4-60debccaffe7/content/images/size/w1200/2025/05/IMG_5713.jpg" alt="Brooklyn Bridge Park" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
+            <h3>Brooklyn Bridge Park</h3>
+            <p>⭐ 4.8 • DUMBO, Brooklyn</p>
+            <button class="btn-primary">View Details</button>
+          </div>
+
+          <div class="card" data-description="Public restroom along the Coney Island boardwalk.">
+            <img class="card-img" src="https://c8.alamy.com/comp/R4A90D/futuristic-bathrooms-coney-island-brooklyn-new-york-united-states-of-america-R4A90D.jpg" alt="Coney Island" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px;">
+            <h3>Coney Island Boardwalk</h3>
+            <p>⭐ 4.5 • Coney Island, Brooklyn</p>
+            <button class="btn-primary">View Details</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  </section>
+
 
     <script src="env.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>

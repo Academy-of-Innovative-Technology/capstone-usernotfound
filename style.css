@@ -119,6 +119,33 @@ body {
   .overlap-card { position: static; transform: none; width: 100%; margin-top: 18px; }
   .showcase-inner { flex-direction: column; }
 }
+
+/* Login page helpers */
+.small-link { color: var(--accent); text-decoration: none; font-weight: 600; }
+.login-root { display: grid; grid-template-columns: 1fr 420px; gap: 28px; align-items: start; padding: 120px 20px 60px; }
+.login-root .hero { padding: 0; }
+.login-box { background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 18px 50px rgba(2,6,23,0.06); max-width: 520px; margin: 0 auto; }
+.login-box label { display: block; margin-top: 12px; font-weight: 600; }
+.login-box input { width: 100%; padding: 12px; margin-top: 6px; border-radius: 10px; border: 1px solid rgba(10,20,20,0.08); }
+.login-actions { display:flex; gap:12px; align-items:center; margin-top: 12px; }
+
+@media (max-width: 900px) {
+  .login-root { grid-template-columns: 1fr; padding-top: 100px; }
+  .login-box { max-width: 100%; }
+}
+/* login form error styling */
+.input-error {
+  color: #b00020;
+  font-size: 0.85rem;
+  margin-top: 6px;
+}
+.invalid {
+  outline: 1px solid #b00020;
+}
+/* ensure login action buttons have space when stacked */
+.login-actions .btn {
+  margin-bottom: 8px;
+}
 .cards-wrapper {
   position: absolute;
   bottom: 18px;
@@ -329,3 +356,27 @@ a:focus, button:focus, input:focus { outline: 3px solid rgba(11,91,255,0.12); ou
 .side-images { display:flex; gap:12px; width:200px; }
 .side-images img, .map-thumb, .visual-plate { border-radius: 12px; box-shadow: var(--shadow); }
 .map-preview { height: 220px; display:flex; align-items:center; justify-content:center; color: var(--muted); font-weight:700; }
+
+
+.side-images {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  padding: 12px 8px;
+  align-items: center;
+}
+.side-images img {
+  flex: 0 0 auto;
+  width: 260px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  scroll-snap-align: center;
+}
+
+.side-images::-webkit-scrollbar { height: 10px; }
+.side-images::-webkit-scrollbar-thumb { background: rgba(11,91,255,0.15); border-radius: 999px; }
