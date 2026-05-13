@@ -80,7 +80,7 @@
   </main>
 
   <script>
-    // ...existing code...
+
     (function () {
       const form = document.getElementById('login-form');
       const usernameEl = document.getElementById('username');
@@ -89,7 +89,7 @@
       const guestBtn = document.getElementById('guest-btn');
       const errorEl = document.getElementById('login-error');
 
-      // If login page was requested with returnTo, use it after login
+
       const params = new URLSearchParams(window.location.search);
       const returnTo = params.get('returnTo') || 'index.html';
 
@@ -109,18 +109,17 @@
         if (!password) { showError('Please enter a password.'); passwordEl.focus(); return; }
         if (!/^\d{5}$/.test(zipcode)) { showError('Please enter a valid 5-digit ZIP code.'); zipcodeEl.focus(); return; }
 
-        // Save a simple local session (mock authentication)
+
         const user = { username: username, zipcode: zipcode, loggedAt: Date.now() };
         try { sessionStorage.setItem('user', JSON.stringify(user)); } catch (e) { console.warn('sessionStorage error', e); }
 
-        // Redirect to the intended page
+
         window.location.href = returnTo;
       });
 
       guestBtn.addEventListener('click', function (e) {
         e.preventDefault();
-        // create a lightweight guest session
-        const guest = { username: 'guest', zipcode: '00000', guest: true, loggedAt: Date.now() };
+        const guest = {zipcode: '00000', loggedAt: Date.now() };
         try { sessionStorage.setItem('user', JSON.stringify(guest)); } catch (e) { console.warn('sessionStorage error', e); }
         window.location.href = returnTo;
       });
