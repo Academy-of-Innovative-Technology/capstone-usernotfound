@@ -332,9 +332,10 @@ a:focus, button:focus, input:focus { outline: 3px solid rgba(11,91,255,0.12); ou
 
 
 .side-images {
+
   display: flex;
-  gap: 12px;
-  width: 100%;
+    gap: 12px;
+    width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
@@ -353,3 +354,5 @@ a:focus, button:focus, input:focus { outline: 3px solid rgba(11,91,255,0.12); ou
 
 .side-images::-webkit-scrollbar { height: 10px; }
 .side-images::-webkit-scrollbar-thumb { background: rgba(11,91,255,0.15); border-radius: 999px; }
+
+
