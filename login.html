@@ -1,78 +1,32 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Restroom Radar — Login</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    :root{
-      --accent:#0072ff;
-      --muted:#6b7280;
-      --card:#ffffffcc;
-      --glass: rgba(255,255,255,0.7);
-      --radius:14px;
-    }
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(135deg,#dbeafe 0%,#f0fdfa 100%);color:#0b1220;}
-    header.site-header{
-      display:flex;align-items:center;justify-content:space-between;padding:18px 24px;backdrop-filter: blur(6px);
-    }
-    .brand{display:flex;align-items:center;gap:12px}
-    .brand .logo{
-      width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#00c6ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;box-shadow:0 6px 20px rgba(2,6,23,0.06);
-    }
-    .brand h1{font-size:18px;margin:0}
-    .brand p{margin:0;font-size:12px;color:var(--muted)}
-    main.login-root{display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:center;max-width:1200px;margin:48px auto;padding:0 20px;}
-    .hero {
-      padding:36px;border-radius:var(--radius);background:linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.35));
-      box-shadow:0 10px 40px rgba(2,6,23,0.05);
-    }
-    .hero h2{margin:0 0 12px 0;font-size:28px}
-    .hero p{margin:0;color:var(--muted);line-height:1.4}
-    .login-box {
-      background:var(--card);padding:26px;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.06);display:flex;flex-direction:column;gap:12px;
-    }
-    .login-box label{font-size:13px;color:var(--muted);margin-top:8px}
-    .login-box input{padding:12px 14px;border-radius:8px;border:1px solid #e6e9ef;font-size:15px}
-    .login-actions{display:flex;align-items:center;justify-content:space-between;margin-top:8px;gap:12px}
-    .small-link{font-size:13px;color:var(--muted);text-decoration:none}
-    .btn-primary{cursor:pointer}
-    .footer-note{margin-top:20px;font-size:13px;color:var(--muted)}
-    /* responsive */
-    @media (max-width:900px){
-      main.login-root{grid-template-columns:1fr;padding:20px;margin:20px auto;gap:18px}
-    }
+   
+    .login-root { max-width: 980px; margin: 80px auto; padding: 0 16px; }
+    .login-box { background: var(--card-bg, #fff); padding: 20px; border-radius: 12px; max-width: 520px; margin: 0 auto; box-shadow: var(--shadow, 0 10px 30px rgba(2,6,23,0.06)); }
+    label { display:block; margin-top:12px; font-weight:600; }
+    input[type="text"], input[type="password"] { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e6e9ee; margin-top:6px; }
+    .login-actions { display:flex; gap:12px; align-items:center; margin-top:16px; }
+    .btn-primary { background:linear-gradient(135deg,#0b5fff,#00c6ff); color:#fff; border:none; padding:10px 14px; border-radius:999px; cursor:pointer; font-weight:700; }
+    .small-link { background:transparent; color:var(--accent,#0b5fff); border:none; padding:10px 14px; border-radius:999px; cursor:pointer; font-weight:700; }
+    .input-error { color:#c53030; margin-top:8px; font-size:13px; }
+    .invalid { outline: 2px solid rgba(197,63,63,0.12); }
+    .footer-note { margin-top:12px; font-size:13px; color:var(--muted,#475569); }
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="brand">
-      <div class="logo">RR</div>
-      <div>
-        <h1>Restroom Radar</h1>
-        <p>Find public restrooms near you</p>
-      </div>
-    </div>
-    <nav aria-label="top">
-      <a class="small-link" href="index.html">Home</a>
-      <span style="margin:0 10px;color:var(--muted)">•</span>
-      <a class="small-link" href="#" onclick="alert('Privacy policy placeholder');return false">Privacy</a>
-    </nav>
+  <header style="padding:18px 16px; text-align:center">
+    <h1 style="margin:0">🚻 Restroom Radar</h1>
   </header>
 
   <main class="login-root">
-    <section class="hero" aria-hidden="false">
-      <h2>Welcome back — let's get you on the map</h2>
-      <p>Restroom Radar helps you discover nearby public restrooms with accessibility features, ratings, and directions. Sign in to save favorites and see personalized suggestions.</p>
-
-      <div class="footer-note">
-        Tip: You can test the map without creating an account — the app stores a session locally.
-      </div>
-    </section>
-
     <form id="login-form" class="login-box" novalidate>
-      <h3 style="margin:0 0 6px 0">Sign in to Restroom Radar</h3>
+      <h2 style="margin:0 0 8px 0">Sign in to Restroom Radar</h2>
 
       <label for="username">Username</label>
       <input id="username" name="username" type="text" autocomplete="username" required placeholder="e.g. alex123">
@@ -84,37 +38,115 @@
       <input id="zipcode" name="zipcode" type="text" inputmode="numeric" pattern="[0-9]*" required placeholder="5-digit ZIP code">
 
       <div class="login-actions">
-        <button id="submit-login" type="submit" class="btn-primary" style="background:linear-gradient(135deg,var(--accent),#00c6ff);color:#fff;padding:10px 16px;border-radius:999px;border:none;font-weight:700">Go to Radar</button>
-        <a class="small-link" href="#" id="guest-btn">Continue as Guest</a>
+        <button id="submit-login" type="submit" class="btn-primary">Go to Radar</button>
+        <button type="button" class="small-link" id="guest-btn">Continue as Guest</button>
       </div>
 
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
-        <a class="small-link" href="#" onclick="alert('Reset password placeholder');return false">Forgot password?</a>
-        <a class="small-link" href="#" onclick="alert('Create account placeholder');return false">Create an account</a>
+      <div class="footer-note">
+        Tip: For testing use any username (≥2 chars), password (≥4 chars) and a 5-digit ZIP. Guest will skip validation.
       </div>
     </form>
   </main>
 
   <script>
-    // Keep same behavior but nicer feedback
-    document.getElementById('login-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const username = document.getElementById('username')?.value?.trim();
-      const password = document.getElementById('password')?.value?.trim();
-      const zipcode = document.getElementById('zipcode')?.value?.trim();
+    document.addEventListener('DOMContentLoaded', () => {
 
-      if (!username || !password) { alert('Please enter username and password'); return; }
-      if (!/^[0-9]{5}$/.test(zipcode)) { alert('Enter a 5-digit ZIP code'); return; }
+      const form = document.getElementById('login-form');
+      const username = document.getElementById('username');
+      const password = document.getElementById('password');
+      const zipcode = document.getElementById('zipcode');
+      const guestBtn = document.getElementById('guest-btn');
+      const submitBtn = document.getElementById('submit-login');
 
-      try { sessionStorage.setItem('user', JSON.stringify({ username, zipcode })); } catch (err) {}
-      window.location.href = 'index.html';
-    });
+      function clearError(input) {
+        if (!input) return;
+        input.classList.remove('invalid');
+        const next = input.nextElementSibling;
+        if (next && next.classList.contains('input-error')) next.remove();
+      }
 
-    // quick guest button for testing without redirect loop
-    document.getElementById('guest-btn').addEventListener('click', function (e) {
-      e.preventDefault();
-      try { sessionStorage.setItem('user', JSON.stringify({ username: 'guest', zipcode: '10001' })); } catch (err) {}
-      window.location.href = 'index.html';
+      function showError(input, message) {
+        if (!input) return;
+        clearError(input);
+        input.classList.add('invalid');
+        const error = document.createElement('div');
+        error.className = 'input-error';
+        error.setAttribute('aria-live', 'polite');
+        error.textContent = message;
+        input.insertAdjacentElement('afterend', error);
+      }
+
+      function validateForm() {
+        let valid = true;
+
+        if (!username || username.value.trim().length < 2) {
+          showError(username, 'Username must be at least 2 characters');
+          valid = false;
+        } else clearError(username);
+
+        if (!password || password.value.trim().length < 4) {
+          showError(password, 'Password must be at least 4 characters');
+          valid = false;
+        } else clearError(password);
+
+        const zip = zipcode ? zipcode.value.trim() : '';
+        if (!/^\d{5}$/.test(zip)) {
+          showError(zipcode, 'Enter a valid 5-digit ZIP code');
+          valid = false;
+        } else clearError(zipcode);
+
+        return valid;
+      }
+
+      if (!form) {
+        console.error('login: form element not found');
+        return;
+      }
+
+      // Form submit handler
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!validateForm()) return;
+
+        const user = {
+          username: username.value.trim(),
+          zipcode: zipcode.value.trim(),
+          loggedIn: true
+        };
+
+        try { sessionStorage.setItem('rr_user', JSON.stringify(user)); }
+        catch (err) { console.error('Session storage failed:', err); }
+
+        // go to home page
+        window.location.href = 'index.html';
+      });
+
+      // Ensure submit button triggers submit even if browser quirks exist
+      if (submitBtn) {
+        submitBtn.addEventListener('click', (ev) => {
+          ev.preventDefault();
+          if (typeof form.requestSubmit === 'function') form.requestSubmit();
+          else form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        });
+      }
+
+      // Guest button: skip validation and go to home
+      if (guestBtn) {
+        guestBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const guestUser = { username: 'Guest', guest: true, loggedIn: true };
+          try { sessionStorage.setItem('rr_user', JSON.stringify(guestUser)); }
+          catch (err) { console.error('Session storage failed:', err); }
+          window.location.href = 'index.html';
+        });
+      }
+
+      // Live input cleanup
+      [username, password, zipcode].forEach((input) => {
+        if (!input) return;
+        input.addEventListener('input', () => clearError(input));
+      });
+
     });
   </script>
 </body>
