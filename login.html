@@ -1,32 +1,65 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Restroom Radar — Login</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-   
-    .login-root { max-width: 980px; margin: 80px auto; padding: 0 16px; }
-    .login-box { background: var(--card-bg, #fff); padding: 20px; border-radius: 12px; max-width: 520px; margin: 0 auto; box-shadow: var(--shadow, 0 10px 30px rgba(2,6,23,0.06)); }
-    label { display:block; margin-top:12px; font-weight:600; }
-    input[type="text"], input[type="password"] { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e6e9ee; margin-top:6px; }
-    .login-actions { display:flex; gap:12px; align-items:center; margin-top:16px; }
-    .btn-primary { background:linear-gradient(135deg,#0b5fff,#00c6ff); color:#fff; border:none; padding:10px 14px; border-radius:999px; cursor:pointer; font-weight:700; }
-    .small-link { background:transparent; color:var(--accent,#0b5fff); border:none; padding:10px 14px; border-radius:999px; cursor:pointer; font-weight:700; }
-    .input-error { color:#c53030; margin-top:8px; font-size:13px; }
-    .invalid { outline: 2px solid rgba(197,63,63,0.12); }
-    .footer-note { margin-top:12px; font-size:13px; color:var(--muted,#475569); }
+  
+
+.brand{
+  text-align: center;
+  padding: 20px;
+  background-color: hwb(153 78% 9%);
+}
+
+    .login-root {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .login-box {
+      background: #fff;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    .login-box label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+    .login-box input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .login-actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
   </style>
 </head>
 <body>
-  <header style="padding:18px 16px; text-align:center">
-    <h1 style="margin:0">🚻 Restroom Radar</h1>
+  <header class="site-header">
+    <div class="brand">
+        <h1>Restroom Radar</h1>
+        <p>Find public restrooms near you</p>
+      </div>
+    </div>
   </header>
 
   <main class="login-root">
     <form id="login-form" class="login-box" novalidate>
-      <h2 style="margin:0 0 8px 0">Sign in to Restroom Radar</h2>
+      <h3 style="margin:0 0 6px 0">Sign in to Restroom Radar</h3>
 
       <label for="username">Username</label>
       <input id="username" name="username" type="text" autocomplete="username" required placeholder="e.g. alex123">
@@ -37,117 +70,69 @@
       <label for="zipcode">Zip Code</label>
       <input id="zipcode" name="zipcode" type="text" inputmode="numeric" pattern="[0-9]*" required placeholder="5-digit ZIP code">
 
+      <div style="margin-top:8px;color:#c53030;font-size:13px" id="login-error" role="status" aria-live="polite"></div>
+
       <div class="login-actions">
         <button id="submit-login" type="submit" class="btn-primary">Go to Radar</button>
-        <button type="button" class="small-link" id="guest-btn">Continue as Guest</button>
-      </div>
-
-      <div class="footer-note">
-        Tip: For testing use any username (≥2 chars), password (≥4 chars) and a 5-digit ZIP. Guest will skip validation.
+        <button id="guest-btn" type="button" class="small-link">Continue as Guest</button>
       </div>
     </form>
   </main>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-
+    // ...existing code...
+    (function () {
       const form = document.getElementById('login-form');
-      const username = document.getElementById('username');
-      const password = document.getElementById('password');
-      const zipcode = document.getElementById('zipcode');
+      const usernameEl = document.getElementById('username');
+      const passwordEl = document.getElementById('password');
+      const zipcodeEl = document.getElementById('zipcode');
       const guestBtn = document.getElementById('guest-btn');
-      const submitBtn = document.getElementById('submit-login');
+      const errorEl = document.getElementById('login-error');
 
-      function clearError(input) {
-        if (!input) return;
-        input.classList.remove('invalid');
-        const next = input.nextElementSibling;
-        if (next && next.classList.contains('input-error')) next.remove();
+      // If login page was requested with returnTo, use it after login
+      const params = new URLSearchParams(window.location.search);
+      const returnTo = params.get('returnTo') || 'index.html';
+
+      function showError(msg) {
+        errorEl.textContent = msg || '';
       }
 
-      function showError(input, message) {
-        if (!input) return;
-        clearError(input);
-        input.classList.add('invalid');
-        const error = document.createElement('div');
-        error.className = 'input-error';
-        error.setAttribute('aria-live', 'polite');
-        error.textContent = message;
-        input.insertAdjacentElement('afterend', error);
-      }
-
-      function validateForm() {
-        let valid = true;
-
-        if (!username || username.value.trim().length < 2) {
-          showError(username, 'Username must be at least 2 characters');
-          valid = false;
-        } else clearError(username);
-
-        if (!password || password.value.trim().length < 4) {
-          showError(password, 'Password must be at least 4 characters');
-          valid = false;
-        } else clearError(password);
-
-        const zip = zipcode ? zipcode.value.trim() : '';
-        if (!/^\d{5}$/.test(zip)) {
-          showError(zipcode, 'Enter a valid 5-digit ZIP code');
-          valid = false;
-        } else clearError(zipcode);
-
-        return valid;
-      }
-
-      if (!form) {
-        console.error('login: form element not found');
-        return;
-      }
-
-      // Form submit handler
-      form.addEventListener('submit', (e) => {
+      form.addEventListener('submit', function (e) {
         e.preventDefault();
-        if (!validateForm()) return;
+        showError('');
 
-        const user = {
-          username: username.value.trim(),
-          zipcode: zipcode.value.trim(),
-          loggedIn: true
-        };
+        const username = (usernameEl.value || '').trim();
+        const password = (passwordEl.value || '').trim();
+        const zipcode = (zipcodeEl.value || '').trim();
 
-        try { sessionStorage.setItem('rr_user', JSON.stringify(user)); }
-        catch (err) { console.error('Session storage failed:', err); }
+        if (!username) { showError('Please enter a username.'); usernameEl.focus(); return; }
+        if (!password) { showError('Please enter a password.'); passwordEl.focus(); return; }
+        if (!/^\d{5}$/.test(zipcode)) { showError('Please enter a valid 5-digit ZIP code.'); zipcodeEl.focus(); return; }
 
-        // go to home page
-        window.location.href = 'index.html';
+        // Save a simple local session (mock authentication)
+        const user = { username: username, zipcode: zipcode, loggedAt: Date.now() };
+        try { sessionStorage.setItem('user', JSON.stringify(user)); } catch (e) { console.warn('sessionStorage error', e); }
+
+        // Redirect to the intended page
+        window.location.href = returnTo;
       });
 
-      // Ensure submit button triggers submit even if browser quirks exist
-      if (submitBtn) {
-        submitBtn.addEventListener('click', (ev) => {
-          ev.preventDefault();
-          if (typeof form.requestSubmit === 'function') form.requestSubmit();
-          else form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-        });
-      }
-
-      // Guest button: skip validation and go to home
-      if (guestBtn) {
-        guestBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const guestUser = { username: 'Guest', guest: true, loggedIn: true };
-          try { sessionStorage.setItem('rr_user', JSON.stringify(guestUser)); }
-          catch (err) { console.error('Session storage failed:', err); }
-          window.location.href = 'index.html';
-        });
-      }
-
-      // Live input cleanup
-      [username, password, zipcode].forEach((input) => {
-        if (!input) return;
-        input.addEventListener('input', () => clearError(input));
+      guestBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        // create a lightweight guest session
+        const guest = { username: 'guest', zipcode: '00000', guest: true, loggedAt: Date.now() };
+        try { sessionStorage.setItem('user', JSON.stringify(guest)); } catch (e) { console.warn('sessionStorage error', e); }
+        window.location.href = returnTo;
       });
 
-    });
+      // Optional: prefill from session if present
+      try {
+        const existing = JSON.parse(sessionStorage.getItem('user') || 'null');
+        if (existing && existing.username) usernameEl.value = existing.username;
+        if (existing && existing.zipcode) zipcodeEl.value = existing.zipcode;
+      } catch (e) { /* ignore parse errors */ }
+    })();
+    // ...existing code...
   </script>
 </body>
 </html>
