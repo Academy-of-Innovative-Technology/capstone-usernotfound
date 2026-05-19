@@ -18,14 +18,14 @@
     }
     .brand{display:flex;align-items:center;gap:12px}
     .brand .logo{
-      width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#b1eeff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;box-shadow:0 6px 20px rgba(2,6,23,0.06);
+      width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#9ae9ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;box-shadow:0 6px 20px rgba(2,6,23,0.06);
     }
     .brand h1{font-size:18px;margin:0}
     .brand p{margin:0;font-size:12px;color:var(--muted)}
-    main.login-root{display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:center;max-width:1200px;margin:48px auto;padding:0 20px;}
+    main.login-root{display:grid;grid-template-columns:1fr 200px;gap:400px;align-items:center;max-width:1200px;margin:48px auto;padding:0 20px;}
     .hero {
-      padding:36px;border-radius:var(--radius);background:linear-gradient(180deg,#f4f4f499,rgba(255, 255, 255, 0.35));
-      box-shadow:0 10px 40px rgba(0, 0, 0, 0.05);
+      padding:36px;border-radius:var(--radius);background:linear-gradient(180deg,#65cf8799,rgba(130, 213, 234, 0.91));
+      box-shadow:0 10px 40px #853e3e0d;
     }
     .hero h2{margin:0 0 12px 0;font-size:28px}
     .hero p{margin:0;color:var(--muted);line-height:1.4}
@@ -33,7 +33,7 @@
       background:var(--card);padding:26px;border-radius:12px;box-shadow:0 8px 30px rgba(0, 0, 0, 0.06);display:flex;flex-direction:column;gap:12px;
     }
     .login-box label{font-size:13px;color:var(--muted);margin-top:8px}
-    .login-box input{padding:12px 14px;border-radius:8px;border:1px solid #547084;font-size:15px}
+    .login-box input{padding:12px 14px;border-radius:8px;border:1px solid #abc3d4;font-size:15px}
     .login-actions{display:flex;align-items:center;justify-content:space-between;margin-top:8px;gap:12px}
     .small-link{font-size:13px;color:var(--muted);text-decoration:none}
     .btn-primary{cursor:pointer}
@@ -66,7 +66,7 @@
       <p>Restroom Radar helps you discover nearby public restrooms with accessibility features, ratings, and directions. Sign in to save favorites and see personalized suggestions.</p>
 
       <div class="footer-note">
-        Tip: You can test the map without creating an account — the app stores a session locally.
+            Tip: You can test the map without creating an account — the app stores a session locally.
       </div>
     </section>
 
@@ -95,7 +95,6 @@
   </main>
 
   <script>
-    // Keep same behavior but nicer feedback
     document.getElementById('login-form').addEventListener('submit', function (e) {
       e.preventDefault();
       const username = document.getElementById('username')?.value?.trim();
@@ -109,7 +108,6 @@
       window.location.href = 'index.html';
     });
 
-    // quick guest button for testing without redirect loop
     document.getElementById('guest-btn').addEventListener('click', function (e) {
       e.preventDefault();
       try { sessionStorage.setItem('user', JSON.stringify({ username: 'guest', zipcode: '10001' })); } catch (err) {}

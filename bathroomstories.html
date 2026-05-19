@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bathroom Stories — Restroom Radar</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .stories-root { max-width:1100px; margin:96px auto; padding:20px; gap:18px; display:block; }
+    .story-form, .stories-list { background: linear-gradient(180deg, rgba(255,255,255,0.96), #fbfdff); padding:20px; border-radius:12px; box-shadow:0 12px 30px rgba(2,6,23,0.06); }
+    .story-row { border-bottom:1px solid rgba(11,91,255,0.04); padding:14px 0; display:block; }
+    .story-meta { display:flex; justify-content:space-between; gap:12px; align-items:center; }
+    .muted { color:#64748b; font-size:14px; }
+    .input-row { display:flex; gap:12px; margin-bottom:12px; align-items:center; }
+    textarea { width:100%; min-height:110px; resize:vertical; padding:12px; border-radius:10px; border:1px solid rgba(10,20,40,0.06); background:#fff; }
+    input, select { padding:10px 12px; border-radius:10px; border:1px solid rgba(10,20,40,0.06); background:#fff; }
+    .small { font-size:13px; color:#475569; }
+    .stories-empty { padding:28px; text-align:center; color:var(--muted); }
+    .story-row p { margin:10px 0 0 0; line-height:1.5; color:#0b1220; }
+    .story-row strong { color: var(--accent); }
+    .btn-row { display:flex; gap:10px; align-items:center; margin-top:8px; }
+    @media (max-width:900px) {
+      .input-row { flex-direction:column; align-items:stretch; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container navbar">
+      <h1 class="brand">🚻 Restroom Radar</h1>
+      <nav aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="profile.html">Profile</a>
+        <a href="bathroomstories.html" aria-current="page">Bathroom Stories</a>
+      </nav>
+      <div class="search-wrap"><input class="search-input" placeholder="Search..." aria-label="Search"></div>
+    </div>
+  </header>
+
+  <main class="stories-root container" role="main" style="margin-top:96px">
+    <section class="story-form" aria-labelledby="post-heading">
+      <h2 id="post-heading" style="margin:0 0 8px 0">Share your Bathroom Story</h2>
+      <p class="muted" style="margin:0 0 12px 0">Tell others what you experienced — tips, cleanliness, accessibility, or anything useful.</p>
+
+      <div>
+        <div class="input-row">
+          <input id="story-location" placeholder="Location (park, station, address...)" />
+          <select id="story-rating" aria-label="Rating">
+            <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
+            <option value="4">⭐️⭐️⭐️⭐️</option>
+            <option value="3">⭐️⭐️⭐️</option>
+            <option value="2">⭐️⭐️</option>
+            <option value="1">⭐️</option>
+          </select>
+        </div>
+        <textarea id="story-text" placeholder="Write your experience..."></textarea>
+
+        <div class="btn-row">
+          <button id="post-story" class="btn-primary">Post Story</button>
+          <button id="clear-stories" class="btn-secondary">Clear all</button>
+          <div id="stories-msg" class="small muted" style="margin-left:8px"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stories-list" aria-labelledby="community-heading" style="margin-top:18px">
+      <h3 id="community-heading" style="margin:0 0 8px 0">Community Stories</h3>
+      <div id="stories-container" aria-live="polite">
+        <div class="muted small">Loading stories…</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function(){
+      const STORAGE_KEY = 'bathroomStories:v1';
+      const postBtn = document.getElementById('post-story');
+      const clearBtn = document.getElementById('clear-stories');
+      const container = document.getElementById('stories-container');
+      const locEl = document.getElementById('story-location');
+      const txtEl = document.getElementById('story-text');
+      const ratingEl = document.getElementById('story-rating');
+      const msg = document.getElementById('stories-msg');
+
+      function load() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e){ return []; } }
+      function save(list) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch(e){ console.warn(e); } }
+      function sanitize(s){ return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+      function render() {
+        const list = load();
+        container.innerHTML = '';
+        if (!list.length) {
+          container.innerHTML = '<div class="stories-empty">No stories yet — be the first to share one.</div>';
+          return;
+        }
+        list.slice().reverse().forEach((s) => {
+          const el = document.createElement('div');
+          el.className = 'story-row';
+          el.innerHTML = '<div class="story-meta"><div><strong>' + sanitize(s.location||'Unknown location') + '</strong><div class="small muted">' + (new Date(s.when).toLocaleString()) + '</div></div><div class="small">Rating: ' + '⭐'.repeat(Math.max(1,Math.min(5,Number(s.rating)||1))) + '</div></div><p>' + sanitize(s.text || '') + '</p>';
+          container.appendChild(el);
+        });
+      }
+
+      postBtn.addEventListener('click', () => {
+        const location = (locEl.value||'').trim();
+        const text = (txtEl.value||'').trim();
+        const rating = parseInt(ratingEl.value || '5',10);
+        if (!text) { msg.textContent = 'Please write a short note.'; return; }
+        const list = load();
+        list.push({ location: location || 'Unknown', text, rating, when: Date.now() });
+        save(list);
+        locEl.value = '';
+        txtEl.value = '';
+        ratingEl.value = '5';
+        msg.textContent = 'Posted.';
+        setTimeout(()=> msg.textContent = '',2000);
+        render();
+      });
+
+      clearBtn.addEventListener('click', () => {
+        if (!confirm('Clear all stories?')) return;
+        try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+        render();
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>
