@@ -268,17 +268,6 @@ html,body { height: 100%; margin: 0; font-family: Inter, system-ui, -apple-syste
 /* Layout */
 .layout { display: grid; grid-template-columns: 300px 1fr; gap: var(--gap); min-height: calc(100vh - 120px); margin-top: 92px; }
 
-/* Sidebar / filters */
-.filters {
-  background: var(--card-bg);
-  padding: 20px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
 /* Map area */
 .map-area { position: relative; border-radius: var(--radius); display:flex; flex-direction:column; gap:16px; }
 #map { width:100%; height: 520px; min-height: 360px; border-radius: 12px; box-shadow: 0 12px 30px rgba(2,6,23,0.06); }
