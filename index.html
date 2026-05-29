@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Restroom Radar</title>
-
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
-
   <style>
     :root {
       --green: #16a34a;
@@ -51,14 +48,19 @@
 
     .brand {
       color: var(--green);
-      font-size: 22px;
+      font-size: 24px;
       font-weight: bold;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     nav a {
       text-decoration: none;
       color: var(--text);
-      margin: 0 10px;
       padding: 8px 12px;
       border-radius: 8px;
       transition: 0.2s;
@@ -70,7 +72,7 @@
     }
 
     .search-input {
-      padding: 8px 12px;
+      padding: 10px 14px;
       border: 1px solid var(--border);
       border-radius: 10px;
       outline: none;
@@ -78,19 +80,41 @@
 
     /* HERO */
     .hero {
-      padding: 70px 20px 40px;
+      padding: 80px 20px 50px;
+      background: linear-gradient(to bottom, #ecfdf5, #f4f6f5);
     }
 
     .hero h2 {
-      font-size: 34px;
-      margin-bottom: 12px;
+      font-size: 38px;
+      margin-bottom: 14px;
     }
 
     .lead {
       color: var(--muted);
       max-width: 700px;
       margin: auto;
-      line-height: 1.6;
+      line-height: 1.7;
+      font-size: 17px;
+    }
+
+    .hero-buttons {
+      margin-top: 24px;
+    }
+
+    .btn-primary {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 10px;
+      background: var(--green);
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--green-dark);
     }
 
     /* IMAGE SCROLLER */
@@ -98,7 +122,7 @@
       display: flex;
       gap: 16px;
       overflow-x: auto;
-      padding: 20px;
+      padding: 24px;
       scroll-snap-type: x mandatory;
       justify-content: center;
     }
@@ -120,14 +144,20 @@
       gap: 16px;
       max-width: 1100px;
       margin: auto;
-      padding: 40px 20px;
+      padding: 50px 20px;
     }
 
     .feature-card {
       background: var(--card);
       border: 1px solid var(--border);
-      padding: 20px;
+      padding: 24px;
       border-radius: 14px;
+      transition: 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
     }
 
     .feature-card h3 {
@@ -137,6 +167,7 @@
 
     .feature-card p {
       color: var(--muted);
+      line-height: 1.6;
     }
 
     /* SHOWCASE */
@@ -145,7 +176,7 @@
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-      gap: 20px;
+      gap: 24px;
       padding: 50px 20px;
       max-width: 1100px;
       margin: auto;
@@ -153,15 +184,17 @@
 
     .showcase-copy {
       max-width: 500px;
+      text-align: left;
     }
 
     .showcase-copy h3 {
-      font-size: 26px;
-      margin-bottom: 10px;
+      font-size: 28px;
+      margin-bottom: 12px;
     }
 
     .showcase-copy p {
       color: var(--muted);
+      line-height: 1.7;
     }
 
     .visual-plate {
@@ -169,34 +202,30 @@
       height: 260px;
     }
 
-    /* MAP */
-    .map-card {
-      display: block;
-      background: var(--card);
-      border: 1px solid var(--border);
-      padding: 30px;
+    .visual-plate img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       border-radius: 14px;
-      margin: 40px auto;
-      max-width: 800px;
-      text-decoration: none;
-      color: var(--text);
+      border: 1px solid var(--border);
     }
 
-    /* POPULAR */
+    /* POPULAR SPOTS */
     .cards-wrapper {
-      padding: 40px 20px;
+      padding: 50px 20px;
     }
 
     .section-title {
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       color: var(--green);
+      font-size: 32px;
     }
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-      max-width: 1100px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
       margin: auto;
     }
 
@@ -204,119 +233,358 @@
       background: var(--card);
       border: 1px solid var(--border);
       padding: 16px;
-      border-radius: 14px;
+      border-radius: 16px;
+      transition: 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .card h3 {
+      margin-top: 14px;
+      margin-bottom: 8px;
     }
 
     .card p {
       color: var(--muted);
+      line-height: 1.6;
     }
 
-    .btn-primary {
-      margin-top: 10px;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 8px;
-      background: var(--green);
-      color: white;
-      cursor: pointer;
+    .details {
+      display: none;
+      margin-top: 14px;
+      animation: fadeIn 0.3s ease;
     }
 
-    .btn-primary:hover {
-      background: var(--green-dark);
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
+    /* FOOTER */
+    .footer {
+      margin-top: 60px;
+      padding: 30px;
+      background: white;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 14px;
+      }
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .search-input {
+        width: 100%;
+        max-width: 300px;
+      }
+      .hero h2 {
+        font-size: 30px;
+      }
+      .showcase-copy {
+        text-align: center;
+      }
+    }
   </style>
 </head>
 
 <body>
+  <!-- NAVBAR -->
+  <header class="topbar">
+    <div class="navbar">
+      <h1 class="brand">🚻 Restroom Radar</h1>
 
-<header class="topbar">
-  <div class="navbar">
-    <h1 class="brand">🚻 Restroom Radar</h1>
+      <nav>
+        <a href="login.html">Login</a>
+        <a href="profile.html">Profile</a>
+        <a href="map.html">Map</a>
+        <a href="bathroomstories.html">Stories</a>
+      </nav>
 
-    <nav>
-      <a href="login.html">Login</a>
-      <a href="profile.html">Profile</a>
-                <a href="map.html">Map</a>
-      <a href="bathroomstories.html">Stories</a>
-    </nav>
+      <input
+        class="search-input"
+        id="searchBox"
+        placeholder="Search location..."
+        aria-label="Search location"
+      />
+    </div>
+  </header>
 
-    <input class="search-input" placeholder="Search location..." />
-  </div>
-</header>
+  <!-- HERO -->
+  <section class="hero">
+    <h2>Find clean public restrooms nearby quickly and easily.</h2>
+    <p class="lead">
+      Restroom Radar helps you locate restrooms with accessibility info, ratings,
+      and walking time — all in one simple place.
+    </p>
 
-<section class="hero">
-  <h2>Find clean public restrooms nearby quickly and easily.</h2>
-  <p class="lead">
-    Restroom Radar helps you locate restrooms with accessibility info, ratings, and walking time — all in one simple place.
-  </p>
-</section>
+    <div class="hero-buttons">
+      <a href="map.html" class="btn-primary">Find Restrooms Near Me</a>
+    </div>
+  </section>
 
-<div class="side-images">
-  <img src="https://thearchitectsdiary.com/wp-content/uploads/2020/05/Public-toilets-1024x683.jpg">
-  <img src="https://t4.ftcdn.net/jpg/06/14/46/07/240_F_614460720_73P86IhawwZ4O1gfbYan2AgfDORQSwEL.jpg">
-  <img src="https://www.tollbrothers.com/blog-content/blog/wp-content/uploads/2022/02/Toll-Brothers-at-Wildflower_Evans_Bathroom1.jpeg">
-</div>
-
-<section class="features-grid">
-
-  <div class="feature-card">
-    <h3>Quick Search</h3>
-    <p>Find nearby restrooms instantly.</p>
-  </div>
-
-  <div class="feature-card">
-    <h3>Community Reports</h3>
-    <p>Real-time updates from users.</p>
-  </div>
-
-  <div class="feature-card">
-    <h3>Offline Friendly</h3>
-    <p>Save spots for offline use.</p>
-  </div>
-
-</section>
-
-<section class="showcase-inner">
-
-  <div class="showcase-copy">
-    <h3>Explore your city with confidence</h3>
-    <p>Find clean and accessible restrooms wherever you go without stress.</p>
+  <!-- IMAGE SCROLLER -->
+  <div class="side-images" aria-hidden="false">
+    <img
+      loading="lazy"
+      alt="Public restroom"
+      src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1200&auto=format&fit=crop"
+    />
+    <img
+      loading="lazy"
+      alt="Modern restroom"
+      src="https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=1200&auto=format&fit=crop"
+    />
+    <img
+      loading="lazy"
+      alt="Luxury restroom"
+      src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=1200&auto=format&fit=crop"
+    />
   </div>
 
-  <div class="visual-plate">
-    <img src="https://www.bhg.com/thmb/-fMaB0U41bSke7O7bhH1cMl3g2s=/1244x0/filters:no_upscale():strip_icc()/black-white-modern-bathroom-plants-9a32b43a-8b9d4a315d88430882bfeef9c5d25d68.jpg"
-    style="width:100%;height:100%;object-fit:cover;border-radius:14px;">
-  </div>
-
-</section>
-
-<section class="cards-wrapper">
-
-  <h2 class="section-title">🔥 Popular Spots</h2>
-
-  <div class="cards">
-
-    <div class="card">
-      <h3>Astoria Park</h3>
-      <p>⭐ 3.8 • Queens</p>
-      <button class="btn-primary">View Details</button>
+  <!-- FEATURES -->
+  <section class="features-grid" aria-label="features">
+    <div class="feature-card">
+      <h3>⚡ Quick Search</h3>
+      <p>Find nearby restrooms instantly with simple location search.</p>
     </div>
 
-    <div class="card">
-      <h3>Gantry Plaza</h3>
-      <p>⭐ 4.4 • LIC</p>
-      <button class="btn-primary">View Details</button>
+    <div class="feature-card">
+      <h3>📍 Community Reports</h3>
+      <p>Real-time cleanliness updates and safety reviews from users.</p>
     </div>
 
-    <div class="card">
-      <h3>Brooklyn Bridge Park</h3>
-      <p>⭐ 4.8 • Brooklyn</p>
-      <button class="btn-primary">View Details</button>
+    <div class="feature-card">
+      <h3>📱 Offline Friendly</h3>
+      <p>Save restroom locations for offline access while traveling.</p>
+    </div>
+  </section>
+
+  <!-- SHOWCASE -->
+  <section class="showcase-inner">
+    <div class="showcase-copy">
+      <h3>Explore your city with confidence</h3>
+      <p>
+        Find clean and accessible restrooms wherever you go without stress.
+        Whether you're traveling, commuting, or exploring new places, Restroom
+        Radar helps you stay comfortable.
+      </p>
     </div>
 
-  </div>
-</section>
+    <div class="visual-plate">
+      <img
+        loading="lazy"
+        alt="Modern restroom interior"
+        src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=1200&auto=format&fit=crop"
+      />
+    </div>
+  </section>
 
+  <!-- POPULAR SPOTS -->
+  <section class="cards-wrapper">
+    <h2 class="section-title">🔥 Popular Spots</h2>
+
+    <div class="cards">
+      <!-- CARD 1 -->
+      <div class="card">
+        <img
+          loading="lazy"
+          alt="Astoria Park restroom"
+          src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1200&auto=format&fit=crop"
+        />
+        <h3>Astoria Park</h3>
+        <p>⭐ 3.8 • Queens</p>
+        <button class="btn-primary" onclick="toggleDetails('spot1')">View Details</button>
+
+        <div class="details" id="spot1">
+          <img
+            loading="lazy"
+            alt="Public restroom interior"
+            src="https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=1200&auto=format&fit=crop"
+          />
+          <p>
+            Spacious public restroom near the waterfront with wheelchair
+            accessibility and regular maintenance.
+          </p>
+        </div>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="card">
+        <img
+          loading="lazy"
+          alt="Modern restroom facility"
+          src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=1200&auto=format&fit=crop"
+        />
+        <h3>Gantry Plaza</h3>
+        <p>⭐ 4.4 • LIC</p>
+        <button class="btn-primary" onclick="toggleDetails('spot2')">View Details</button>
+
+        <div class="details" id="spot2">
+          <img
+            loading="lazy"
+            alt="Clean bathroom interior"
+            src="https://images.unsplash.com/photo-1629079447777-1e605162dc8d?q=80&w=1200&auto=format&fit=crop"
+          />
+          <p>
+            Modern restroom with baby changing stations, bright lighting, and
+            nearby waterfront seating.
+          </p>
+        </div>
+      </div>
+
+      <!-- CARD 3 -->
+      <div class="card">
+        <img
+          loading="lazy"
+          alt="Brooklyn Bridge Park restroom"
+          src="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop"
+        />
+        <h3>Brooklyn Bridge Park</h3>
+        <p>⭐ 4.8 • Brooklyn</p>
+        <button class="btn-primary" onclick="toggleDetails('spot3')">View Details</button>
+
+        <div class="details" id="spot3">
+          <img
+            loading="lazy"
+            alt="Luxury public restroom"
+            src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=1200&auto=format&fit=crop"
+          />
+          <p>
+            One of the cleanest public restroom facilities in NYC with frequent
+            cleaning and park views.
+          </p>
+        </div>
+      </div>
+
+      <!-- CARD 4 -->
+      <div class="card">
+        <img
+          loading="lazy"
+          alt="Central Park restroom"
+          src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop"
+        />
+        <h3>Central Park South</h3>
+        <p>⭐ 4.2 • Manhattan</p>
+        <button class="btn-primary" onclick="toggleDetails('spot4')">View Details</button>
+
+        <div class="details" id="spot4">
+          <img
+            loading="lazy"
+            alt="Modern sink and mirror restroom"
+            src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=1200&auto=format&fit=crop"
+          />
+          <p>
+            Popular restroom stop near major walking paths and tourist
+            attractions in Manhattan.
+          </p>
+        </div>
+      </div>
+
+      <!-- CARD 5 -->
+      <div class="card">
+        <img
+          loading="lazy"
+          alt="Prospect Park restroom"
+          src="https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1200&auto=format&fit=crop"
+        />
+        <h3>Prospect Park</h3>
+        <p>⭐ 4.6 • Brooklyn</p>
+        <button class="btn-primary" onclick="toggleDetails('spot5')">View Details</button>
+
+        <div class="details" id="spot5">
+          <img
+            loading="lazy"
+            alt="Accessible restroom"
+            src="https://images.unsplash.com/photo-1629079447420-6d0f0b5f9c91?q=80&w=1200&auto=format&fit=crop"
+          />
+          <p>
+            Quiet restroom area with shaded seating nearby and strong
+            accessibility features.
+          </p>
+        </div>
+      </div>
+
+      <!-- CARD 6 -->
+      <div class="card">
+        <img
+          loading="lazy"
+          alt="Battery Park restroom"
+          src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?q=80&w=1200&auto=format&fit=crop"
+        />
+        <h3>Battery Park</h3>
+        <p>⭐ 4.5 • Manhattan</p>
+        <button class="btn-primary" onclick="toggleDetails('spot6')">View Details</button>
+
+        <div class="details" id="spot6">
+          <img
+            loading="lazy"
+            alt="Family friendly restroom"
+            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1200&auto=format&fit=crop"
+          />
+          <p>
+            Family friendly restroom facility with nearby ferry access and
+            strong cleanliness ratings.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Restroom Radar • Built for accessible city navigation</p>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    function toggleDetails(id) {
+      const section = document.getElementById(id);
+      if (!section) return;
+
+      // hide any open details
+      document.querySelectorAll('.details').forEach(d => {
+        if (d !== section) d.style.display = 'none';
+      });
+
+      section.style.display = section.style.display === 'block' ? 'none' : 'block';
+
+      // scroll into view for smaller screens
+      if (section.style.display === 'block') {
+        section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    document.getElementById('searchBox').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        const query = e.target.value.trim();
+        if (query) {
+          window.location.href = `map.html?search=${encodeURIComponent(query)}`;
+        }
+      }
+    });
+  </script>
 </body>
 </html>
