@@ -1,0 +1,180 @@
+{
+  "response": [
+    {
+      "location": {
+        "name": "Bryant Park Restroom",
+        "borough": "Manhattan",
+        "address": "6th Ave & W 42nd St, New York, NY 10018"
+      },
+      "profile": {
+        "wheelchairAccessible": true,
+        "automaticDoor": true,
+        "grabBars": true,
+        "genderNeutral": false,
+        "adultChangingTable": false
+      },
+      "coordinates": {
+        "latitude": 40.7536,
+        "longitude": -73.9832
+      },
+      "hours": {
+        "open": "07:00",
+        "close": "22:00",
+        "open24Hours": false
+      },
+      "image": "https://example.com/images/bryant-park-restroom.jpg",
+      "amenities": [
+        "Wheelchair Accessible Stall",
+        "Baby Changing Station",
+        "Soap Dispenser",
+        "Running Water"
+      ]
+    },
+    {
+      "location": {
+        "name": "Central Park Visitor Center Restroom",
+        "borough": "Manhattan",
+        "address": "14 E 60th St, New York, NY 10022"
+      },
+      "profile": {
+        "wheelchairAccessible": true,
+        "automaticDoor": true,
+        "grabBars": true,
+        "genderNeutral": true,
+        "adultChangingTable": false
+      },
+      "coordinates": {
+        "latitude": 40.7648,
+        "longitude": -73.9730
+      },
+      "hours": {
+        "open": "06:00",
+        "close": "21:00",
+        "open24Hours": false
+      },
+      "image": "https://example.com/images/central-park-restroom.jpg",
+      "amenities": [
+        "Family Restroom",
+        "Wheelchair Accessible Stall",
+        "Changing Station"
+      ]
+    },
+    {
+      "location": {
+        "name": "Brooklyn Bridge Park Pier 1 Restroom",
+        "borough": "Brooklyn",
+        "address": "334 Furman St, Brooklyn, NY 11201"
+      },
+      "profile": {
+        "wheelchairAccessible": true,
+        "automaticDoor": false,
+        "grabBars": true,
+        "genderNeutral": true,
+        "adultChangingTable": false
+      },
+      "coordinates": {
+        "latitude": 40.7003,
+        "longitude": -73.9967
+      },
+      "hours": {
+        "open": "06:00",
+        "close": "23:00",
+        "open24Hours": false
+      },
+      "image": "https://example.com/images/brooklyn-bridge-park.jpg",
+      "amenities": [
+        "Wheelchair Accessible Stall",
+        "Family Restroom",
+        "Changing Station"
+      ]
+    },
+    {
+      "location": {
+        "name": "Prospect Park Restroom",
+        "borough": "Brooklyn",
+        "address": "95 Prospect Park W, Brooklyn, NY 11215"
+      },
+      "profile": {
+        "wheelchairAccessible": true,
+        "automaticDoor": true,
+        "grabBars": true,
+        "genderNeutral": false,
+        "adultChangingTable": false
+      },
+      "coordinates": {
+        "latitude": 40.6602,
+        "longitude": -73.9690
+      },
+      "hours": {
+        "open": "07:00",
+        "close": "20:00",
+        "open24Hours": false
+      },
+      "image": "https://example.com/images/prospect-park-restroom.jpg",
+      "amenities": [
+        "Wheelchair Accessible Stall",
+        "Running Water",
+        "Soap Dispenser"
+      ]
+    },
+    {
+      "location": {
+        "name": "Flushing Meadows Corona Park Restroom",
+        "borough": "Queens",
+        "address": "11101 Corona Ave, Queens, NY 11368"
+      },
+      "profile": {
+        "wheelchairAccessible": true,
+        "automaticDoor": true,
+        "grabBars": true,
+        "genderNeutral": true,
+        "adultChangingTable": true
+      },
+      "coordinates": {
+        "latitude": 40.7498,
+        "longitude": -73.8408
+      },
+      "hours": {
+        "open": "06:00",
+        "close": "21:00",
+        "open24Hours": false
+      },
+      "image": "https://example.com/images/flushing-meadows-restroom.jpg",
+      "amenities": [
+        "Adult Changing Table",
+        "Family Restroom",
+        "Gender Neutral",
+        "Wheelchair Accessible Stall"
+      ]
+    },
+    {
+      "location": {
+        "name": "Astoria Park Restroom",
+        "borough": "Queens",
+        "address": "19 19th St, Astoria, NY 11105"
+      },
+      "profile": {
+        "wheelchairAccessible": true,
+        "automaticDoor": false,
+        "grabBars": true,
+        "genderNeutral": true,
+        "adultChangingTable": false
+      },
+      "coordinates": {
+        "latitude": 40.7794,
+        "longitude": -73.9225
+      },
+      "hours": {
+        "open": "06:00",
+        "close": "22:00",
+        "open24Hours": false
+      },
+      "image": "https://example.com/images/astoria-park-restroom.jpg",
+      "amenities": [
+        "Gender Neutral",
+        "Wheelchair Accessible Stall",
+        "Changing Station"
+      ]
+    }
+  ]
+}
