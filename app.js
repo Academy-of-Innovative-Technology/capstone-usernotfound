@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
     map.addControl(new mapboxgl.NavigationControl());
 
     // ---------------- API → SPOTS FORMAT ----------------
-    fetch("YOUR_API_URL_HERE")
+    fetch("api.json")
       .then(res => res.json())
       .then(json => {
         const spots = json.response.map(item => ({
