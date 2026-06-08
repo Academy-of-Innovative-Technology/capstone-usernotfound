@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Bathroom Stories — Restroom Radar</title>
+
+<style>
+:root{
+  --green:#16a34a;
+  --green-dark:#15803d;
+  --bg:#f4f6f5;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+}
+
+.topbar{
+  background:white;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:1000;
+}
+
+.navbar{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 20px;
+  gap:10px;
+}
+
+.brand{
+  color:var(--green);
+  font-weight:bold;
+  font-size:20px;
+}
+
+nav a{
+  margin:0 6px;
+  text-decoration:none;
+  color:var(--text);
+  padding:8px 10px;
+  border-radius:8px;
+}
+
+nav a:hover{
+  background:var(--green);
+  color:white;
+}
+
+.search-input{
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  outline:none;
+}
+
+/* PAGE */
+.stories-root{
+  max-width:1000px;
+  margin:40px auto;
+  padding:20px;
+}
+
+/* CARDS */
+.story-form,
+.stories-list{
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:20px;
+  border-radius:14px;
+  margin-bottom:20px;
+}
+
+/* INPUTS */
+.input-row{
+  display:flex;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  outline:none;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+
+.btn-primary{
+  background:var(--green);
+  color:white;
+  border:none;
+  padding:10px 14px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.btn-primary:hover{
+  background:var(--green-dark);
+}
+
+.btn-secondary{
+  background:#e5e7eb;
+  border:none;
+  padding:10px 14px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.btn-secondary:hover{
+  background:#d1d5db;
+}
+
+.btn-row{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-top:10px;
+  flex-wrap:wrap;
+}
+
+.story-row{
+  border-bottom:1px solid var(--border);
+  padding:14px 0;
+}
+
+.story-meta{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.story-row p{
+  margin-top:8px;
+  line-height:1.5;
+}
+
+.muted{ color:var(--muted); font-size:13px; }
+.small{ font-size:13px; }
+
+.stories-empty{
+  text-align:center;
+  padding:30px;
+  color:var(--muted);
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="navbar">
+    <h1 class="brand">🚻 Restroom Radar</h1>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="profile.html">Profile</a>
+      <a href="map.html">Map</a>
+    </nav>
+
+    <input class="search-input" placeholder="Search..." />
+  </div>
+</header>
+
+<main class="stories-root">
+
+<section class="story-form">
+  <h2>Share your Bathroom Story</h2>
+  <p class="muted">Tell others about cleanliness, accessibility, or tips.</p>
+
+  <div class="input-row">
+    <input id="story-location" placeholder="Location..." />
+    <select id="story-rating">
+      <option value="5">⭐⭐⭐⭐⭐</option>
+      <option value="4">⭐⭐⭐⭐</option>
+      <option value="3">⭐⭐⭐</option>
+      <option value="2">⭐⭐</option>
+      <option value="1">⭐</option>
+    </select>
+  </div>
+
+  <textarea id="story-text" placeholder="Write your experience..."></textarea>
+
+  <div class="btn-row">
+    <button id="post-story" class="btn-primary">Post Story</button>
+    <button id="clear-stories" class="btn-secondary">Clear all</button>
+    <div id="stories-msg" class="small muted"></div>
+  </div>
+</section>
+
+<section class="stories-list">
+  <h3>Community Stories</h3>
+  <div id="stories-container">
+    <div class="muted">Loading stories...</div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+
+const STORAGE_KEY = "bathroomStories:v2";
+
+const postBtn = document.getElementById("post-story");
+const clearBtn = document.getElementById("clear-stories");
+const container = document.getElementById("stories-container");
+const locEl = document.getElementById("story-location");
+const txtEl = document.getElementById("story-text");
+const ratingEl = document.getElementById("story-rating");
+const msg = document.getElementById("stories-msg");
+const search = document.querySelector(".search-input");
+
+/* USER */
+const user = JSON.parse(sessionStorage.getItem("user")) || { username:"Guest" };
+
+/* LOAD */
+function load(){
+  return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+}
+
+/* SAVE */
+function save(data){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+/* SANITIZE */
+function clean(s){
+  return String(s).replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+/* TIME */
+function timeAgo(t){
+  const s = Math.floor((Date.now()-t)/1000);
+  const m = s/60, h=m/60, d=h/24;
+  if(d>1) return Math.floor(d)+"d ago";
+  if(h>1) return Math.floor(h)+"h ago";
+  if(m>1) return Math.floor(m)+"m ago";
+  return "just now";
+}
+
+/* RENDER */
+function render(filter=""){
+  const data = load();
+
+  const filtered = data.filter(x =>
+    x.text.toLowerCase().includes(filter.toLowerCase()) ||
+    x.location.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  container.innerHTML = "";
+
+  if(!filtered.length){
+    container.innerHTML = `<div class="stories-empty">No stories yet.</div>`;
+    return;
+  }
+
+  filtered.slice().reverse().forEach(story=>{
+    const el = document.createElement("div");
+    el.className = "story-row";
+
+    el.innerHTML = `
+      <div class="story-meta">
+        <div>
+          <strong>${clean(story.location)}</strong>
+          <div class="muted">
+            by ${clean(story.user)} • ${timeAgo(story.when)}
+          </div>
+        </div>
+        <div class="small">${"⭐".repeat(story.rating)}</div>
+      </div>
+
+      <p>${clean(story.text)}</p>
+
+      <div style="margin-top:10px;display:flex;gap:10px;">
+        <button class="btn-secondary like">❤️ ${story.likes||0}</button>
+        <button class="btn-secondary del">Delete</button>
+      </div>
+    `;
+
+    /* LIKE */
+    el.querySelector(".like").onclick = () => {
+      const all = load();
+      const item = all.find(x=>x.id===story.id);
+      if(item){
+        item.likes = (item.likes||0)+1;
+        save(all);
+        render(search.value);
+      }
+    };
+
+    /* DELETE */
+    el.querySelector(".del").onclick = () => {
+      const all = load().filter(x=>x.id!==story.id);
+      save(all);
+      render(search.value);
+    };
+
+    container.appendChild(el);
+  });
+}
+
+/* POST */
+postBtn.onclick = () => {
+
+  const text = txtEl.value.trim();
+
+  if(!text) return msg.textContent="Write something first";
+
+  const all = load();
+
+  all.push({
+    id:Date.now(),
+    user:user.username,
+    location:locEl.value || "Unknown",
+    text,
+    rating:parseInt(ratingEl.value),
+    likes:0,
+    when:Date.now()
+  });
+
+  save(all);
+
+  txtEl.value="";
+  locEl.value="";
+  ratingEl.value="5";
+
+  msg.textContent="Posted!";
+  setTimeout(()=>msg.textContent="",1500);
+
+  render(search.value);
+};
+
+/* CLEAR ALL */
+clearBtn.onclick = () => {
+  if(!confirm("Clear all stories?")) return;
+
+  localStorage.removeItem(STORAGE_KEY);
+
+  msg.textContent="All cleared!";
+  setTimeout(()=>msg.textContent="",1500);
+
+  render();
+};
+
+/* SEARCH */
+search.oninput = () => render(search.value);
+
+render();
+
+})();
+</script>
+
+</body>
+</html>
