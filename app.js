@@ -111,25 +111,148 @@ document.addEventListener('DOMContentLoaded', function () {
     map.addControl(new mapboxgl.NavigationControl());
 
     // ---------------- API → SPOTS FORMAT ----------------
-    fetch("YOUR_API_URL_HERE")
-      .then(res => res.json())
-      .then(json => {
-        const spots = json.response.map(item => ({
-          title: item.location?.name,
-          coords: [
-            item.coordinates?.longitude,
-            item.coordinates?.latitude
-          ],
-          rating: item.profile?.wheelchairAccessible
-            ? "⭐ Wheelchair Accessible"
-            : "⭐ Standard Access",
-          description: item.location?.address
-        }));
+           (function loadSpots() {
+      const LOCAL_API = 'api.json';
 
-        renderSpots(spots, map);
-      })
-      .catch(err => console.error("API error:", err));
+      function toNumber(v){ const n = Number(v); return Number.isFinite(n) ? n : null; }
 
+      function extractCoords(item){
+        // GeoJSON feature: geometry.coordinates = [lng,lat]
+        if (item && item.geometry && Array.isArray(item.geometry.coordinates) && item.geometry.coordinates.length >= 2) {
+          const [lng, lat] = item.geometry.coordinates;
+          return [toNumber(lng), toNumber(lat)];
+        }
+        // nested coordinates object: coordinates: { longitude, latitude }
+        if (item && item.coordinates && (item.coordinates.longitude !== undefined || item.coordinates.lat !== undefined)) {
+          const lng = item.coordinates.longitude ?? item.coordinates.lon ?? item.coordinates.lng;
+          const lat = item.coordinates.latitude ?? item.coordinates.lat ?? item.coordinates.latitud;
+          return [toNumber(lng), toNumber(lat)];
+        }
+        // flat fields lat / lon
+        if (item && (item.lat !== undefined || item.latitude !== undefined)) {
+          const lat = item.lat ?? item.latitude;
+          const lng = item.lon ?? item.lng ?? item.longitude;
+          return [toNumber(lng), toNumber(lat)];
+        }
+        // location object with lat/lng
+        if (item && item.location && (item.location.lat !== undefined || item.location.latitude !== undefined)) {
+          const lat = item.location.lat ?? item.location.latitude;
+          const lng = item.location.lon ?? item.location.lng ?? item.location.longitude;
+          return [toNumber(lng), toNumber(lat)];
+        }
+        // common nested shapes (profile.coordinates etc)
+        if (item && item.profile && item.profile.coordinates) {
+          const c = item.profile.coordinates;
+          const lng = c.longitude ?? c.lon ?? c.lng;
+          const lat = c.latitude ?? c.lat;
+          return [toNumber(lng), toNumber(lat)];
+        }
+        return [null, null];
+      }
+
+      function shapeFromApiItem(item){
+        const [lng, lat] = extractCoords(item);
+        if (!toNumber(lng) || !toNumber(lat)) return null;
+        return {
+          title: item.location?.name || item.name || item.title || item.properties?.name || 'Unknown',
+          coords: [lng, lat],
+          rating: item.profile?.wheelchairAccessible ? "⭐ Wheelchair Accessible" : (item.rating ? `⭐ ${item.rating}` : '⭐'),
+          description: item.location?.address || item.description || item.notes || item.properties?.description || ''
+        };
+      }
+
+      // built-in popular spots to always include
+      const popularSpots = [
+        { id: 'astoria', name: 'Astoria Park Restroom', location: 'Astoria, Queens', rating: 3.8, lng: -73.9222, lat: 40.7794, desc: 'Small public restroom near the waterfront.' },
+        { id: 'gantry', name: 'Gantry Plaza State Park', location: 'LIC', rating: 4.4, lng: -73.9590, lat: 40.7435, desc: 'Well maintained facilities.' },
+        { id: 'bbp', name: 'Brooklyn Bridge Park', location: 'DUMBO', rating: 4.8, lng: -73.9967, lat: 40.7033, desc: 'Large restroom with attendants.' },
+        { id: 'coney', name: 'Coney Island Boardwalk', location: 'Coney Island', rating: 4.5, lng: -73.9850, lat: 40.5749, desc: 'Public restrooms along the boardwalk.' },
+        { id: 'central', name: 'Central Park — 72nd St', location: 'Central Park', rating: 4.2, lng: -73.9742, lat: 40.7755, desc: 'Park restroom with accessible path and benches nearby.' },
+        { id: 'prospect', name: 'Prospect Park', location: 'Prospect Park', rating: 4.6, lng: -73.9690, lat: 40.6602, desc: 'Quiet restroom area with shaded seating nearby.' },
+        { id: 'battery', name: 'Battery Park', location: 'Battery Park', rating: 4.5, lng: -74.0170, lat: 40.7033, desc: 'Family friendly restroom facility with nearby ferry access.' }
+      ];
+
+      function mapPopularToSpot(s){
+        return {
+          title: s.name + ' — ' + s.location,
+          coords: [s.lng, s.lat],
+          rating: '⭐ ' + s.rating,
+          description: s.desc
+        };
+      }
+
+      // dedupe by coords + title
+      function uniqueSpots(list){
+        const seen = new Set();
+        const out = [];
+        list.forEach(s => {
+          if (!s || !Array.isArray(s.coords)) return;
+          const key = `${Number(s.coords[0]).toFixed(5)}|${Number(s.coords[1]).toFixed(5)}|${String(s.title||'').toLowerCase()}`;
+          if (seen.has(key)) return;
+          seen.add(key);
+          out.push(s);
+        });
+        return out;
+      }
+
+      fetch(LOCAL_API)
+        .then(res => {
+          if (!res.ok) throw new Error('local json not found');
+          return res.json();
+        })
+        .then(json => {
+          // Accept either top-level array, { response: [] } or GeoJSON { features: [] }
+          const rawList = Array.isArray(json) ? json : (json.response || json.features || []);
+          const items = Array.isArray(rawList) ? rawList : [];
+
+          const apiSpots = items.map(i => {
+            // if geojson feature, try feature.properties
+            const candidate = i && i.type === 'Feature' && i.properties ? Object.assign({}, i.properties, { geometry: i.geometry }) : i;
+            return shapeFromApiItem(candidate);
+          }).filter(Boolean);
+
+          console.debug('Loaded API items:', items.length, 'Parsed spots:', apiSpots.length);
+
+          // combine API spots with built-in popular spots and dedupe
+          const combined = uniqueSpots([ ...apiSpots, ...popularSpots.map(mapPopularToSpot) ]);
+
+          if (combined.length) {
+            renderSpots(combined, map);
+            return;
+          }
+          throw new Error('no valid coords in api response or popular spots');
+        })
+        .catch((err) => {
+          console.warn('API load failed or returned no coords:', err.message || err);
+          // fallback to popular spots only
+          const spots = popularSpots.map(mapPopularToSpot);
+          renderSpots(spots, map);
+        });
+    })(); // close IIFE
+    // ---------------- ORIGINAL STYLE MARKERS ----------------
+    function renderSpots(spots, map) {
+      spots.forEach(s => {
+        const popup = new mapboxgl.Popup({ offset: 12 }).setHTML(`
+          <strong>${s.title}</strong>
+          <div style="font-size:13px;margin-top:6px">
+            ${s.rating}<br/>
+            ${s.description || ""}
+          </div>
+        `);
+
+        const el = document.createElement('div');
+        el.style.width = '18px';
+        el.style.height = '18px';
+        el.style.borderRadius = '50%';
+        el.style.background = '#0072ff';
+        el.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
+
+        new mapboxgl.Marker(el)
+          .setLngLat(s.coords)
+          .setPopup(popup)
+          .addTo(map);
+      });
+    } // <-- Add this to close the IIFE
     // ---------------- ORIGINAL STYLE MARKERS ----------------
     function renderSpots(spots, map) {
       spots.forEach(s => {
@@ -158,4 +281,181 @@ document.addEventListener('DOMContentLoaded', function () {
   } catch (e) {
     console.error('Map error:', e);
   }
+
+    // ---------------- USE CURRENT LOCATION ----------------
+  // Adds a "Use my location" button, centers map on user, shows user marker,
+  // computes distances to loaded spots and renders a small "Nearest" panel.
+  (function addUseCurrentLocation() {
+    // guard: require a map instance and a global spot list (set when loading API)
+    const navbar = document.querySelector('.container.navbar') || document.querySelector('.navbar');
+    if (!navbar) return;
+
+    // add button to UI
+    let locateBtn = document.getElementById('locate-btn');
+    if (!locateBtn) {
+      locateBtn = document.createElement('button');
+      locateBtn.id = 'locate-btn';
+      locateBtn.type = 'button';
+      locateBtn.textContent = 'Use my location';
+      locateBtn.className = 'btn-secondary';
+      locateBtn.style.marginLeft = '12px';
+      navbar.appendChild(locateBtn);
+    }
+
+    // create nearby panel
+    let nearbyPanel = document.getElementById('nearby-panel');
+    if (!nearbyPanel) {
+      nearbyPanel = document.createElement('div');
+      nearbyPanel.id = 'nearby-panel';
+      nearbyPanel.style.position = 'fixed';
+      nearbyPanel.style.right = '18px';
+      nearbyPanel.style.top = '88px';
+      nearbyPanel.style.width = '320px';
+      nearbyPanel.style.maxHeight = '60vh';
+      nearbyPanel.style.overflow = 'auto';
+      nearbyPanel.style.background = 'rgba(255,255,255,0.98)';
+      nearbyPanel.style.boxShadow = '0 10px 30px rgba(2,6,23,0.08)';
+      nearbyPanel.style.borderRadius = '12px';
+      nearbyPanel.style.padding = '12px';
+      nearbyPanel.style.zIndex = '1400';
+      nearbyPanel.style.display = 'none';
+      nearbyPanel.setAttribute('aria-live','polite');
+      document.body.appendChild(nearbyPanel);
+    }
+
+    // small helpers
+    function toRad(v){ return v * Math.PI / 180; }
+    function haversine([lng1, lat1], [lng2, lat2]) {
+      // returns meters
+      const R = 6371000;
+      const φ1 = toRad(lat1), φ2 = toRad(lat2);
+      const Δφ = toRad(lat2 - lat1), Δλ = toRad(lng2 - lng1);
+      const a = Math.sin(Δφ/2)*Math.sin(Δφ/2) + Math.cos(φ1)*Math.cos(φ2)*Math.sin(Δλ/2)*Math.sin(Δλ/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    // user marker + bubble
+    let userMarker = null;
+
+    function showUserMarker(coords) {
+      if (typeof map === 'undefined' || !map) return;
+      // remove previous
+      if (userMarker) {
+        try { userMarker.remove(); } catch(e){}
+        userMarker = null;
+      }
+      const el = document.createElement('div');
+      el.style.width = '18px';
+      el.style.height = '18px';
+      el.style.borderRadius = '50%';
+      el.style.background = '#1e90ff';
+      el.style.boxShadow = '0 3px 10px rgba(30,144,255,0.3)';
+      userMarker = new mapboxgl.Marker(el).setLngLat(coords).addTo(map);
+    }
+
+    function formatDistance(m) {
+      if (m >= 1000) return (m/1000).toFixed(1) + ' km';
+      return Math.round(m) + ' m';
+    }
+
+    function renderNearbyList(userCoords, spots) {
+      if (!Array.isArray(spots) || !spots.length) {
+        nearbyPanel.innerHTML = '<div style="color:#64748b">No nearby spots available.</div>';
+        nearbyPanel.style.display = 'block';
+        return;
+      }
+      // compute distances
+      const enriched = spots.map(s => {
+        const dist = haversine(userCoords, [s.coords[0], s.coords[1]]);
+        return Object.assign({}, s, { distance: dist });
+      }).sort((a,b) => a.distance - b.distance);
+
+      const top = enriched.slice(0, 6);
+      nearbyPanel.innerHTML = '<strong style="display:block;margin-bottom:8px">Nearest restrooms</strong>';
+      top.forEach(s => {
+        const row = document.createElement('div');
+        row.style.padding = '8px 6px';
+        row.style.borderBottom = '1px solid rgba(11,91,255,0.04)';
+        row.style.display = 'flex';
+        row.style.justifyContent = 'space-between';
+        row.style.alignItems = 'center';
+
+        const left = document.createElement('div');
+        left.style.flex = '1 1 auto';
+        left.innerHTML = `<div style="font-weight:700">${s.title}</div><div style="font-size:13px;color:#64748b">${s.rating} • ${formatDistance(s.distance)}</div>`;
+
+        const btns = document.createElement('div');
+        btns.style.display = 'flex';
+        btns.style.gap = '8px';
+        const view = document.createElement('button');
+        view.className = 'btn-primary';
+        view.textContent = 'View';
+        view.onclick = () => {
+          // center map and open popup if marker exists
+          if (typeof map !== 'undefined' && map) {
+            map.flyTo({ center: [s.coords[0], s.coords[1]], zoom: 15 });
+            // try open popup by creating temporary popup
+            new mapboxgl.Popup({ offset: 12 })
+              .setLngLat([s.coords[0], s.coords[1]])
+              .setHTML(`<strong>${s.title}</strong><div style="font-size:13px;margin-top:6px">${s.description||''}</div>`)
+              .addTo(map);
+          }
+        };
+        const dir = document.createElement('button');
+        dir.className = 'btn-secondary';
+        dir.textContent = 'Directions';
+        dir.onclick = () => {
+          const q = encodeURIComponent((s.title || '') + ' ' + (s.description || ''));
+          window.open('https://www.google.com/maps/dir/?api=1&destination=' + q, '_blank');
+        };
+
+        btns.appendChild(view);
+        btns.appendChild(dir);
+
+        row.appendChild(left);
+        row.appendChild(btns);
+        nearbyPanel.appendChild(row);
+      });
+      nearbyPanel.style.display = 'block';
+    }
+
+    function useCurrentLocation() {
+      if (typeof navigator === 'undefined' || !navigator.geolocation) {
+        alert('Geolocation not available in this browser.');
+        return;
+      }
+      locateBtn.disabled = true;
+      locateBtn.textContent = 'Locating…';
+      navigator.geolocation.getCurrentPosition(function(pos) {
+        locateBtn.disabled = false;
+        locateBtn.textContent = 'Use my location';
+        const userCoords = [pos.coords.longitude, pos.coords.latitude];
+        // show marker and center map
+        try { showUserMarker(userCoords); } catch(e){}
+        try { map.flyTo({ center: userCoords, zoom: 14 }); } catch(e){}
+
+        // get the currently loaded spots
+        const allSpots = window.__allSpots || window.__spots || [];
+        if (allSpots && allSpots.length) {
+          renderNearbyList(userCoords, allSpots);
+        } else {
+          // try to collect markers from page (if renderSpots created markers)
+          // fallback: call renderNearbyList with popular fallback (if defined)
+          const fallback = window.__popularSpots || [];
+          renderNearbyList(userCoords, fallback);
+        }
+      }, function(err) {
+        locateBtn.disabled = false;
+        locateBtn.textContent = 'Use my location';
+        console.warn('geolocation error', err);
+        alert('Could not get your location: ' + (err.message || 'Permission denied or unavailable'));
+      }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 });
+    }
+
+    locateBtn.addEventListener('click', useCurrentLocation);
+
+    // expose for console/testing
+    window.useCurrentLocation = useCurrentLocation;
+  })();
 });
